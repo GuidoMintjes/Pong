@@ -7,7 +7,7 @@ namespace Pong {
             using (var game = new Game1())
                 game.Run();
 
-            // Aanpassing 2
+            // Aanpassing
         }
     }
 }
