@@ -9,9 +9,12 @@ namespace Pong {
         private SpriteBatch _spriteBatch;
 
         Texture2D ball;
+        Texture2D test;
 
         MouseState mouse;
         Vector2 cursorSpeed, cursorPos, cursorLastPos;
+
+
 
         public Game1() {
             _graphics = new GraphicsDeviceManager(this);
@@ -19,23 +22,32 @@ namespace Pong {
             IsMouseVisible = false;
         }
 
+
+
         protected override void Initialize() {
             
             //Set window screen sizes
             _graphics.IsFullScreen = true;
-            _graphics.PreferredBackBufferWidth = 1920;
-            _graphics.PreferredBackBufferHeight = 1080;
+            _graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+            _graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
             _graphics.ApplyChanges();
             
             base.Initialize();
         }
+
+
 
         protected override void LoadContent() {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
             ball = Content.Load<Texture2D>("Sprites/bal");
+            test = Content.Load<Texture2D>("Sprites/test");
+
+
         }
+
+
 
         protected override void Update(GameTime gameTime) {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || 
@@ -52,23 +64,24 @@ namespace Pong {
                 cursorSpeed = new Vector2(Math.Abs(cursorPos.X - cursorLastPos.X),
                     Math.Abs(cursorPos.Y - cursorLastPos.Y));
 
-                Console.WriteLine("Speed of cursor is: \tX-axis:" +
-                    cursorSpeed.X + ", \tY-axis:" + cursorSpeed.Y);
+                /*Console.WriteLine("Speed of cursor is: \tX-axis:" +
+                    cursorSpeed.X + ", \tY-axis:" + cursorSpeed.Y);*/
             }
 
             cursorLastPos = cursorPos;
             base.Update(gameTime);
         }
 
+
+
         protected override void Draw(GameTime gameTime) {
 
-            int redColour = gameTime.TotalGameTime.Milliseconds / 4;
-            GraphicsDevice.Clear(new Color(redColour, 0, 0));
+            GraphicsDevice.Clear(Color.Transparent);
 
             _spriteBatch.Begin();
+            _spriteBatch.Draw(test, new Vector2(0, 0), Color.White);
             _spriteBatch.Draw(ball, new Vector2(mouse.X, mouse.Y), Color.White);
             _spriteBatch.End();
-
 
             
             base.Draw(gameTime);
