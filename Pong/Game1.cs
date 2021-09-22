@@ -16,7 +16,12 @@ namespace Pong {
         }
 
         protected override void Initialize() {
-            // TODO: Add your initialization logic here
+
+            //Set window screen sizes
+            _graphics.IsFullScreen = true;
+            _graphics.PreferredBackBufferWidth = 1;
+            _graphics.PreferredBackBufferHeight = 1;
+            _graphics.ApplyChanges();
 
             base.Initialize();
         }
