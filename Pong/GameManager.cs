@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace Pong {
     public class GameManager {
@@ -11,52 +12,40 @@ namespace Pong {
         private int screenWidth, screenHeight;
 
         // Create the players
-        public Player playerOne = new Player();
-        public Player playerTwo = new Player();
+        public Player playerOne;
+        public Player playerTwo;
 
-        public GameManager() {
+        public GameManager(int startLivesParam, int percSpace = 20) {
             //Set game settings
-            Console.Write("Please choose your desired game settings:\n");
-
-
-            Console.Write("Percentage player space: ");
-            percSpaceToPlayer = Console.Read();
-
-            Console.Write("Amount of Lives: ");
-            startLives = Console.Read();
-
+            startLives = startLivesParam;
+            percSpaceToPlayer = percSpace;
         }
 
 
         public Vector2 calcPlayerStartPos(int playerTeam) {
 
-            int playerY = screenHeight / 2;
-            int playerX;
+            float playerY = (screenHeight / 2) - 48;
+            float playerX = 0;
 
-            switch (playerTeam) {
+            Console.WriteLine(screenWidth);
 
-                case 1:
-                    playerX = screenWidth * (percSpaceToPlayer / 100);
-                    break;
-
-                case 2:
-                    playerX = screenWidth - (screenWidth * (percSpaceToPlayer / 100));
-                    break;
-
-                default:
-                    playerX = 0;
-                    break;
+            if (playerTeam == 1) {
+                playerX = screenWidth * (percSpaceToPlayer / 100f);
+            } else if (playerTeam == 2) {
+                playerX = screenWidth - (screenWidth * (percSpaceToPlayer / 100f));
             }
-
-
+            
+            Console.WriteLine("\n" + playerX + " " + playerY);
             return new Vector2(playerX, playerY);
         }
 
         public void initialiseGame(int width, int height) {
             screenWidth = width; screenHeight = height;
 
-            playerOne.initPlayer(0, calcPlayerStartPos(1), 0);
-            playerTwo.initPlayer(0, calcPlayerStartPos(2), 0);
+            playerOne = new Player(1, calcPlayerStartPos(1), startLives,
+                                    new Vector2(width, height));
+            playerTwo = new Player(2, calcPlayerStartPos(2), startLives,
+                                    new Vector2(width, height));
         }
     }
 }

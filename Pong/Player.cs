@@ -4,13 +4,17 @@ using Microsoft.Xna.Framework;
 namespace Pong {
     public class Player {
 
+        // Variables related to miscellaneous
+        private float screenX, screenY;
+        private int padelHeight = 96;
+
         // Variables related to padel main usage
         private int padelTeam;
         private int lives;
         private Vector2 position;
 
         // Variables related to padel extended usage
-        private int speed;
+        public int speed=10;
         private bool inverted;
         private int size;
 
@@ -39,14 +43,14 @@ namespace Pong {
         }
 
 
-        public Player() { }
+        public Player(int team, Vector2 pos, int startLives, Vector2 screenSize) {
 
-        public void initPlayer(int team, Vector2 pos, int startLives) {
-            
-            // Initialize this player
             SetPos(pos);
             SetPadelTeam(team);
             SetLives(startLives);
+
+            screenX = screenSize.X;
+            screenY = screenSize.Y;
         }
 
         // Change the amount of player lives outside this class
@@ -57,7 +61,10 @@ namespace Pong {
 
         // Change the vertical position of this player
         public void ChangeVerticalPos(int amt) {
-            SetPos(new Vector2(GetPos().X, (GetPos().Y + amt)));
+
+            float posY = GetPos().Y + amt;
+            posY = Math.Clamp(posY, 0, (screenY - padelHeight));
+            SetPos(new Vector2(GetPos().X, posY));
         }
     }
 }
