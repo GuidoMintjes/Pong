@@ -11,9 +11,10 @@ namespace Pong {
 
         private int screenWidth, screenHeight;
 
-        // Create the players
+        // Create the players and ball
         public Player playerOne;
         public Player playerTwo;
+        public Ball ball;
 
         public GameManager(int startLivesParam, int percSpace = 20) {
             //Set game settings

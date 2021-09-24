@@ -129,6 +129,7 @@ namespace Pong {
                 _spriteBatch.Begin();
                 _spriteBatch.Draw(pongArt, new Vector2((screenWidth / 2 - 411), 
                     (screenHeight / 2 - 159)), Color.White);
+               // _spriteBatch.DrawString(0,"press space to start", new Vector2 (s)
                 _spriteBatch.End();
             }
 
