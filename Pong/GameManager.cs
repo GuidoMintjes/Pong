@@ -28,19 +28,35 @@ namespace Pong {
             float playerY = (screenHeight / 2) - 48;
             float playerX = 0;
 
-            Console.WriteLine(screenWidth);
-
             if (playerTeam == 1) {
                 playerX = screenWidth * (percSpaceToPlayer / 100f);
             } else if (playerTeam == 2) {
                 playerX = screenWidth - (screenWidth * (percSpaceToPlayer / 100f));
             }
             
-            Console.WriteLine("\n" + playerX + " " + playerY);
             return new Vector2(playerX, playerY);
         }
 
-        public void initialiseGame(int width, int height) {
+
+        // Moves the correct player
+        public void MovePlayer(int team, float deltaTime) {
+            switch(team) {
+                case 1:
+                    playerOne.ChangeVerticalPos(playerOne.speed * deltaTime);   // Check case 2 comm.
+                    break;
+
+                case 2:
+                    playerTwo.ChangeVerticalPos(playerTwo.speed * deltaTime);   // Multiply with
+                                                            // deltatime to avoid framerate
+                                                            // dependant speeds
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        public void InitialiseGame(int width, int height) {
             screenWidth = width; screenHeight = height;
 
             playerOne = new Player(1, calcPlayerStartPos(1), startLives,

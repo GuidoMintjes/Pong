@@ -14,7 +14,7 @@ namespace Pong {
         private Vector2 position;
 
         // Variables related to padel extended usage
-        public int speed=10;
+        public float speed = 20;    // Also sets default speed
         private bool inverted;
         private int size;
 
@@ -60,7 +60,7 @@ namespace Pong {
 
 
         // Change the vertical position of this player
-        public void ChangeVerticalPos(int amt) {
+        public void ChangeVerticalPos(float amt) {
 
             float posY = GetPos().Y + amt;
             posY = Math.Clamp(posY, 0, (screenY - padelHeight));

@@ -52,6 +52,9 @@ namespace Pong {
             _graphics.PreferredBackBufferHeight = Convert.ToInt32(screenHeight);
             _graphics.ApplyChanges();
 
+            _graphics.SynchronizeWithVerticalRetrace = false;
+            IsFixedTimeStep = false;
+
             //initialise game state
             gameState = new GameState();
             gameState = GameState.Menu;
@@ -61,7 +64,7 @@ namespace Pong {
             manager = new GameManager(3, 5);
 
             // initialise game
-            manager.initialiseGame(screenWidth, screenHeight);
+            manager.InitialiseGame(screenWidth, screenHeight);
 
             base.Initialize();
         }
@@ -88,6 +91,10 @@ namespace Pong {
             if (state.IsKeyDown(Keys.Escape)) Exit();
 
 
+            // Save the current delta time
+            float deltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
+
+
             if (gameState == GameState.Menu) {
                 if (state.IsKeyDown(Keys.Space)) {
                     gameState = GameState.Playing;
@@ -98,19 +105,19 @@ namespace Pong {
             if (gameState == GameState.Playing) {
                 // Key checks for player 1
                 if (state.IsKeyDown(Keys.W)) {
-                    manager.playerOne.ChangeVerticalPos(-manager.playerOne.speed);
+                    manager.MovePlayer(1, -manager.playerOne.speed * deltaTime);
                 }
                 if (state.IsKeyDown(Keys.S)) {
-                    manager.playerOne.ChangeVerticalPos(manager.playerOne.speed);
+                    manager.MovePlayer(1, manager.playerOne.speed * deltaTime);
                 }
 
 
                 // Key checks for player 2
                 if (state.IsKeyDown(Keys.Up)) {
-                    manager.playerTwo.ChangeVerticalPos(-manager.playerTwo.speed);
+                    manager.MovePlayer(2, -manager.playerTwo.speed * deltaTime);
                 }
                 if (state.IsKeyDown(Keys.Down)) {
-                    manager.playerTwo.ChangeVerticalPos(manager.playerTwo.speed);
+                    manager.MovePlayer(2, manager.playerTwo.speed * deltaTime);
                 }
             }
 
