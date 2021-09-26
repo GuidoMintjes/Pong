@@ -9,6 +9,9 @@ namespace Pong {
         public int startLives;
         public int percSpaceToPlayer;
 
+        public Vector2 ballStartPos;
+        public float ballDefaultSpeed = 10;
+
         private int screenWidth, screenHeight;
 
         // Create the players and ball
@@ -17,6 +20,7 @@ namespace Pong {
         public Ball ball;
 
         public GameManager(int startLivesParam, int percSpace = 20) {
+            
             //Set game settings
             startLives = startLivesParam;
             percSpaceToPlayer = percSpace;
@@ -56,13 +60,28 @@ namespace Pong {
             }
         }
 
-        public void InitialiseGame(int width, int height) {
+
+        /// <summary>
+        /// This function initializes the game and properly assigns class instances to all
+        /// declared classes.
+        /// </summary>
+        /// <param name="width">Get the width of the window to use in calculation</param>
+        /// <param name="height">Get the width of the window to use in calculation</param>
+        /// <param name="defaultBallPos">Tell whether to use default ball position or not</param>
+        public void InitialiseGame(int width, int height, bool defaultBallPos) {
             screenWidth = width; screenHeight = height;
 
             playerOne = new Player(1, calcPlayerStartPos(1), startLives,
                                     new Vector2(width, height));
             playerTwo = new Player(2, calcPlayerStartPos(2), startLives,
                                     new Vector2(width, height));
+
+            if (defaultBallPos)
+                ballStartPos = new Vector2((width / 2) - Constants.BALLWIDTH, 
+                    (height / 2) - Constants.BALLHEIGHT);   // Calculate middle of screen to spawn ball,
+                                                            // keeping in mind ball dimensions
+
+            ball = new Ball(ballStartPos, ballDefaultSpeed);
         }
     }
 }

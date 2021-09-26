@@ -21,9 +21,6 @@ namespace Pong {
         Texture2D bluePlayer, redPlayer;
         Texture2D pongArt;
 
-        MouseState mouse;
-        Vector2 cursorSpeed, cursorPos, cursorLastPos;
-
         public int screenWidth, screenHeight;
 
         // Game settings variables
@@ -64,7 +61,7 @@ namespace Pong {
             manager = new GameManager(3, 5);
 
             // initialise game
-            manager.InitialiseGame(screenWidth, screenHeight);
+            manager.InitialiseGame(screenWidth, screenHeight, true);
 
             base.Initialize();
         }
@@ -79,7 +76,6 @@ namespace Pong {
             bluePlayer = Content.Load<Texture2D>("Sprites/blauweSpeler");
             redPlayer = Content.Load<Texture2D>("Sprites/rodeSpeler");
             pongArt = Content.Load<Texture2D>("Sprites/PONG");
-
         }
 
 
@@ -145,6 +141,7 @@ namespace Pong {
                 _spriteBatch.Begin();
                 _spriteBatch.Draw(bluePlayer, manager.playerOne.GetPos(), Color.White);
                 _spriteBatch.Draw(redPlayer, manager.playerTwo.GetPos(), Color.White);
+                _spriteBatch.Draw(ball, manager.ball.GetPos(), Color.White);
                 _spriteBatch.End();
             }
             

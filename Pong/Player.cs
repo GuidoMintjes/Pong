@@ -6,7 +6,7 @@ namespace Pong {
 
         // Variables related to miscellaneous
         private float screenX, screenY;
-        private int padelHeight = 96;
+        private const int padelHeight = 96;
 
         // Variables related to padel main usage
         private int padelTeam;
