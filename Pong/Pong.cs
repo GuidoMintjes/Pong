@@ -72,7 +72,7 @@ namespace Pong {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             
-            ball = Content.Load<Texture2D>("Sprites/bal");
+            ball = Content.Load<Texture2D>("Sprites/dvd");
             bluePlayer = Content.Load<Texture2D>("Sprites/blauweSpeler");
             redPlayer = Content.Load<Texture2D>("Sprites/rodeSpeler");
             pongArt = Content.Load<Texture2D>("Sprites/PONG");
@@ -116,6 +116,11 @@ namespace Pong {
                     manager.MovePlayer(2, manager.playerTwo.speed * deltaTime);
                 }
             }
+
+
+            // Call the ball move function to make sure the ball stays moving
+            // TO-DO Kijken of de bal er uberhaupt is op dat moment, anders niet callen
+            manager.ball.MoveBallNormal(deltaTime, new Vector2(screenWidth, screenHeight));
 
 
             base.Update(gameTime);

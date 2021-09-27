@@ -6,6 +6,7 @@ namespace Pong {
 
         // Variables related to position, speed, appearance, collider
         private Vector2 position;
+        private Vector2 direction = new Vector2(1, -1);
         private float speed;
 
 
@@ -27,6 +28,33 @@ namespace Pong {
 
             position = startPos;
             speed = defaultSpeed;
+        }
+
+
+        public void MoveBallNormal(float deltaTime, Vector2 screenSize) {
+
+            Console.WriteLine(position);
+
+            Vector2 combinedDir = direction * speed * deltaTime;
+            Vector2 newPos = GetPos() + combinedDir;
+
+            if(newPos.X >= screenSize.X || newPos.X <= 0) {
+                direction.X *= -1;
+
+                combinedDir = direction * speed * deltaTime;
+                newPos = GetPos() + combinedDir;
+            }
+
+            if(newPos.Y >= screenSize.Y || newPos.Y <= 0) {
+                direction.Y *= -1;
+
+                combinedDir = direction * speed * deltaTime;
+                newPos = GetPos() + combinedDir;
+            }
+
+            
+
+            SetPos(newPos);
         }
     }
 }
