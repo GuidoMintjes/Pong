@@ -19,6 +19,7 @@ namespace Pong {
         public Player playerTwo;
         public Ball ball;
 
+
         public GameManager(int startLivesParam, int percSpace = 20) {
             
             //Set game settings
@@ -77,8 +78,8 @@ namespace Pong {
                                     new Vector2(width, height));
 
             if (defaultBallPos)
-                ballStartPos = new Vector2((width / 2) - Constants.BALLWIDTH, 
-                    (height / 2) - Constants.BALLHEIGHT);   // Calculate middle of screen to spawn ball,
+                ballStartPos = new Vector2((width / 2) - Constants.DEFAULTBALLWIDTH, 
+                    (height / 2) - Constants.DEFAULTBALLHEIGHT);   // Calculate middle of screen to spawn ball,
                                                             // keeping in mind ball dimensions
 
             ball = new Ball(ballStartPos, ballDefaultSpeed);

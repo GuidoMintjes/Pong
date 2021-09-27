@@ -8,7 +8,7 @@ namespace Pong {
         private Vector2 position;
         private Vector2 direction = new Vector2(1, -1);
         private float speed;
-
+        private float speedup = 0.5F;
 
         public Vector2 GetPos() {
             return position;
@@ -23,6 +23,10 @@ namespace Pong {
             speed = newSpeed;
         }
 
+        public void SetDirection(Vector2 newDir)
+        {
+            direction = newDir;
+        }
 
         public Ball(Vector2 startPos, float defaultSpeed) {
 
@@ -35,6 +39,7 @@ namespace Pong {
 
             Console.WriteLine(position);
 
+            
             Vector2 combinedDir = direction * speed * deltaTime;
             Vector2 newPos = GetPos() + combinedDir;
 
@@ -52,7 +57,7 @@ namespace Pong {
                 newPos = GetPos() + combinedDir;
             }
 
-            
+            speed += speedup;
 
             SetPos(newPos);
         }

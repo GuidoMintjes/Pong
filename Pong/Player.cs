@@ -7,6 +7,7 @@ namespace Pong {
         // Variables related to miscellaneous
         private float screenX, screenY;
         private const int padelHeight = 96;
+        private const int padelWidth = 16;
 
         // Variables related to padel main usage
         private int padelTeam;
@@ -41,7 +42,10 @@ namespace Pong {
         public Vector2 GetPos() {
             return position;
         }
-
+        public Vector2 GetSize()
+        {
+            return new Vector2 (padelWidth,padelHeight);
+        }
 
         public Player(int team, Vector2 pos, int startLives, Vector2 screenSize) {
 

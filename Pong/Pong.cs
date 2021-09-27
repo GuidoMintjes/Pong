@@ -21,6 +21,8 @@ namespace Pong {
         Texture2D bluePlayer, redPlayer;
         Texture2D pongArt;
 
+        SpriteFont font, fontBig;
+
         public int screenWidth, screenHeight;
 
         // Game settings variables
@@ -76,6 +78,9 @@ namespace Pong {
             bluePlayer = Content.Load<Texture2D>("Sprites/blauweSpeler");
             redPlayer = Content.Load<Texture2D>("Sprites/rodeSpeler");
             pongArt = Content.Load<Texture2D>("Sprites/PONG");
+
+            font = Content.Load<SpriteFont>("fonts/file");
+            fontBig = Content.Load<SpriteFont>("fonts/file2");
         }
 
 
@@ -120,8 +125,8 @@ namespace Pong {
 
             // Call the ball move function to make sure the ball stays moving
             // TO-DO Kijken of de bal er uberhaupt is op dat moment, anders niet callen
+            //manager.CheckCollision(manager.ball.GetPos());
             manager.ball.MoveBallNormal(deltaTime, new Vector2(screenWidth, screenHeight));
-
 
             base.Update(gameTime);
         }
@@ -137,7 +142,8 @@ namespace Pong {
                 _spriteBatch.Begin();
                 _spriteBatch.Draw(pongArt, new Vector2((screenWidth / 2 - 411), 
                     (screenHeight / 2 - 159)), Color.White);
-               // _spriteBatch.DrawString(0,"press space to start", new Vector2 (s)
+                _spriteBatch.DrawString(font, "Press space to start \nPlayer one: W + D \nPlayer two: Up + Down", 
+                    new Vector2((screenWidth / 2 - 80), (screenHeight / 2 + 179 )), Color.Black); 
                 _spriteBatch.End();
             }
 
@@ -147,6 +153,8 @@ namespace Pong {
                 _spriteBatch.Draw(bluePlayer, manager.playerOne.GetPos(), Color.White);
                 _spriteBatch.Draw(redPlayer, manager.playerTwo.GetPos(), Color.White);
                 _spriteBatch.Draw(ball, manager.ball.GetPos(), Color.White);
+                _spriteBatch.DrawString(fontBig, Convert.ToString(manager.playerOne.GetLives()) , new Vector2(10,10), Color.Black);
+                _spriteBatch.DrawString(fontBig, Convert.ToString(manager.playerTwo.GetLives()), new Vector2(screenWidth - 25, 10), Color.Black);
                 _spriteBatch.End();
             }
             
