@@ -19,6 +19,9 @@ namespace Pong {
         public Player playerTwo;
         public Ball ball;
 
+        public ScoreObject scoreOne;
+        public ScoreObject scoreTwo;
+
 
         public GameManager(int startLivesParam, int percSpace = 20) {
             
@@ -69,7 +72,7 @@ namespace Pong {
         /// <param name="width">Get the width of the window to use in calculation</param>
         /// <param name="height">Get the width of the window to use in calculation</param>
         /// <param name="defaultBallPos">Tell whether to use default ball position or not</param>
-        public void InitialiseGame(int width, int height, bool defaultBallPos) {
+        public void InitialiseGame(int width, int height, bool defaultBallPos, int percScreenSpace) {
             screenWidth = width; screenHeight = height;
 
             playerOne = new Player(1, calcPlayerStartPos(1), startLives,
@@ -83,6 +86,47 @@ namespace Pong {
                                                             // keeping in mind ball dimensions
 
             ball = new Ball(ballStartPos, ballDefaultSpeed);
+
+            scoreOne = new ScoreObject(percScreenSpace, screenWidth);
+            scoreTwo = new ScoreObject(percScreenSpace, screenWidth);
+        }
+
+
+        public void CheckCollision() {
+
+            Vector2 ballPos = ball.GetPos();
+            Vector2 playerOnePos = playerOne.GetPos();
+            Vector2 playerTwoPos = playerTwo.GetPos();
+
+            // Check if ball is hitting player on left side
+            if(ballPos.X < (screenWidth / 2) && 
+                ballPos.X < (playerOnePos.X + Constants.DEFAULTPLAYERWIDTH)) {
+
+                if(ballPos.Y > playerOnePos.Y &&
+                    ballPos.Y < (playerOnePos.Y + Constants.DEFAULTPLAYERHEIGHT)) {
+                    ball.BounceOffPlayer();
+                }
+            }
+
+            // Check if ball is hitting player on right side
+            if(ballPos.X > (screenWidth / 2) &&
+                (ballPos.X + Constants.DEFAULTBALLWIDTH) > playerTwoPos.X) {
+
+                if (ballPos.Y > playerTwoPos.Y &&
+                    ballPos.Y < (playerTwoPos.Y + Constants.DEFAULTPLAYERHEIGHT)) {
+                    ball.BounceOffPlayer();
+                }
+            }
+
+            // Check if ball is hitting score object on left side
+            if(ballPos.X < scoreOne.GetSSX()) {
+                Console.WriteLine("Right player scores!");
+            }
+
+            // Check if ball is hitting score object on right side
+            if ((ballPos.X + Constants.DEFAULTBALLWIDTH) > (screenWidth - scoreOne.GetSSX())) {
+                Console.WriteLine("Left player scores!");
+            }
         }
     }
 }

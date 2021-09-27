@@ -63,7 +63,7 @@ namespace Pong {
             manager = new GameManager(3, 5);
 
             // initialise game
-            manager.InitialiseGame(screenWidth, screenHeight, true);
+            manager.InitialiseGame(screenWidth, screenHeight, true, Constants.DEFAULTSCREENSPACEPERC);
 
             base.Initialize();
         }
@@ -127,6 +127,9 @@ namespace Pong {
             // TO-DO Kijken of de bal er uberhaupt is op dat moment, anders niet callen
             //manager.CheckCollision(manager.ball.GetPos());
             manager.ball.MoveBallNormal(deltaTime, new Vector2(screenWidth, screenHeight));
+
+            manager.CheckCollision();
+
 
             base.Update(gameTime);
         }
