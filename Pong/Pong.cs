@@ -72,7 +72,7 @@ namespace Pong {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             
-            ball = Content.Load<Texture2D>("Sprites/dvd");
+            ball = Content.Load<Texture2D>("Sprites/bal");
             bluePlayer = Content.Load<Texture2D>("Sprites/blauweSpeler");
             redPlayer = Content.Load<Texture2D>("Sprites/rodeSpeler");
             pongArt = Content.Load<Texture2D>("Sprites/PONG");
