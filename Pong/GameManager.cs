@@ -10,7 +10,7 @@ namespace Pong {
         public int percSpaceToPlayer;
 
         public Vector2 ballStartPos;
-        public float ballDefaultSpeed = 250f;
+        public float ballDefaultSpeed = 2500f;
 
         private int screenWidth, screenHeight;
 
