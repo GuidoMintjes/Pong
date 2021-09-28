@@ -7,9 +7,9 @@ using System;
 public enum GameState {
     Menu,
     Playing,
-    Pause
+    Pause,
+    End
 }
-
 
 namespace Pong {
     public class Pong : Game {
@@ -36,9 +36,7 @@ namespace Pong {
             IsMouseVisible = false;
         }
 
-
-
-        protected override void Initialize() {
+    protected override void Initialize() {
 
             // Set screen size variables for later use
             screenHeight = 720; //GraphicsDevice.DisplayMode.Height;
@@ -125,7 +123,7 @@ namespace Pong {
 
             // Call the ball move function to make sure the ball stays moving
             // TO-DO Kijken of de bal er uberhaupt is op dat moment, anders niet callen
-            //manager.CheckCollision(manager.ball.GetPos());
+
             manager.ball.MoveBallNormal(deltaTime, new Vector2(screenWidth, screenHeight));
 
             manager.CheckCollision();

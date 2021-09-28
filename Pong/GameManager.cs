@@ -22,7 +22,6 @@ namespace Pong {
         public ScoreObject scoreOne;
         public ScoreObject scoreTwo;
 
-
         public GameManager(int startLivesParam, int percSpace = 20) {
             
             //Set game settings
@@ -43,6 +42,28 @@ namespace Pong {
             }
             
             return new Vector2(playerX, playerY);
+        }
+
+        public Vector2 generateDirection()
+        {
+            Vector2 dir = new Vector2(0,0);
+            Random rng = new Random();
+            switch (rng.Next(1, 5))
+            {
+                case 1:
+                    dir = new Vector2(1, 1); //right down
+                    break;
+                case 2:
+                    dir = new Vector2(-1, 1); //left down
+                    break;
+                case 3:
+                    dir = new Vector2(1, -1); //right up
+                    break;
+                case 4:
+                    dir = new Vector2(-1, -1); //left up
+                    break;
+            }
+            return dir;
         }
 
 
@@ -92,40 +113,71 @@ namespace Pong {
         }
 
 
-        public void CheckCollision() {
+        public void CheckCollision()
+        {
 
             Vector2 ballPos = ball.GetPos();
             Vector2 playerOnePos = playerOne.GetPos();
             Vector2 playerTwoPos = playerTwo.GetPos();
 
             // Check if ball is hitting player on left side
-            if(ballPos.X < (screenWidth / 2) && 
-                ballPos.X < (playerOnePos.X + Constants.DEFAULTPLAYERWIDTH)) {
+            if (ballPos.X < (screenWidth / 2) &&
+                ballPos.X < (playerOnePos.X + Constants.DEFAULTPLAYERWIDTH))
+            {
 
-                if(ballPos.Y > playerOnePos.Y &&
-                    ballPos.Y < (playerOnePos.Y + Constants.DEFAULTPLAYERHEIGHT)) {
+                if (ballPos.Y > playerOnePos.Y &&
+                    ballPos.Y < (playerOnePos.Y + Constants.DEFAULTPLAYERHEIGHT))
+                {
                     ball.BounceOffPlayer();
                 }
             }
 
             // Check if ball is hitting player on right side
-            if(ballPos.X > (screenWidth / 2) &&
-                (ballPos.X + Constants.DEFAULTBALLWIDTH) > playerTwoPos.X) {
+            if (ballPos.X > (screenWidth / 2) &&
+                (ballPos.X + Constants.DEFAULTBALLWIDTH) > playerTwoPos.X)
+            {
 
                 if (ballPos.Y > playerTwoPos.Y &&
-                    ballPos.Y < (playerTwoPos.Y + Constants.DEFAULTPLAYERHEIGHT)) {
+                    ballPos.Y < (playerTwoPos.Y + Constants.DEFAULTPLAYERHEIGHT))
+                {
                     ball.BounceOffPlayer();
                 }
             }
 
             // Check if ball is hitting score object on left side
-            if(ballPos.X < scoreOne.GetSSX()) {
+            if (ballPos.X < scoreOne.GetSSX())
+            {
                 Console.WriteLine("Right player scores!");
+                Score(2);
             }
 
             // Check if ball is hitting score object on right side
-            if ((ballPos.X + Constants.DEFAULTBALLWIDTH) > (screenWidth - scoreOne.GetSSX())) {
+            if ((ballPos.X + Constants.DEFAULTBALLWIDTH) > (screenWidth - scoreOne.GetSSX()))
+            {
                 Console.WriteLine("Left player scores!");
+                Score(1);
+            }
+        }
+        
+        public void Score(int team) {
+            switch (team)
+            {
+                case 1:
+                    playerTwo.ChangeLives(-1);
+                    break;
+
+                case 2:
+                    playerOne.ChangeLives(-1);
+                    break;
+
+                default:
+                    break;
+            }
+
+            ball.Respawn(ballStartPos, ballDefaultSpeed, generateDirection()) ;
+
+            if (playerOne.GetLives() == 0 || playerTwo.GetLives() == 0) {
+
             }
         }
     }

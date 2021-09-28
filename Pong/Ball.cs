@@ -6,9 +6,10 @@ namespace Pong {
 
         // Variables related to position, speed, appearance, collider
         private Vector2 position;
-        private Vector2 direction = new Vector2(1, -1);
+        private Vector2 direction = new Vector2(-1, -1);
         private float speed;
         private float speedup = 0.5F;
+
 
         public Vector2 GetPos() {
             return position;
@@ -41,11 +42,11 @@ namespace Pong {
             Vector2 newPos = GetPos() + combinedDir;
 
 
-            if(newPos.X >= (screenSize.X - (Constants.DEFAULTBALLWIDTH)) || newPos.X <= 0) {
+            if (newPos.X >= (screenSize.X - (Constants.DEFAULTBALLWIDTH)) || newPos.X <= 0) {
                 direction.X *= -1;
             }
 
-            if(newPos.Y >= (screenSize.Y - (Constants.DEFAULTBALLHEIGHT)) || newPos.Y <= 0) {
+            if (newPos.Y >= (screenSize.Y - (Constants.DEFAULTBALLHEIGHT)) || newPos.Y <= 0) {
                 direction.Y *= -1;
             }
 
@@ -58,5 +59,12 @@ namespace Pong {
         public void BounceOffPlayer() {
             direction.X *= -1;
         }
+
+
+        public void Respawn(Vector2 pos, float newSpeed, Vector2 newDirection) {
+            position = pos;
+            speed = newSpeed;
+            direction = newDirection;
+         }
     }
 }
