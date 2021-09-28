@@ -3,15 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 
-//game states
-public enum GameState {
-    Menu,
-    Playing,
-    Pause,
-    End
-}
 
 namespace Pong {
+
     public class Pong : Game {
 
         private GraphicsDeviceManager _graphics;
@@ -27,8 +21,6 @@ namespace Pong {
 
         // Game settings variables
         public GameManager manager;
-        private GameState gameState;
-
 
         public Pong() {
             _graphics = new GraphicsDeviceManager(this);
@@ -51,11 +43,6 @@ namespace Pong {
 
             _graphics.SynchronizeWithVerticalRetrace = false;
             IsFixedTimeStep = false;
-
-            //initialise game state
-            gameState = new GameState();
-            gameState = GameState.Menu;
-
 
             //initialise game manager
             manager = new GameManager(3, 5);
@@ -94,14 +81,14 @@ namespace Pong {
             float deltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
 
 
-            if (gameState == GameState.Menu) {
+            if (manager.gameState == GameState.Menu) {
                 if (state.IsKeyDown(Keys.Space)) {
-                    gameState = GameState.Playing;
+                    manager.gameState = GameState.Playing;
                 }
             }
 
 
-            if (gameState == GameState.Playing) {
+            if (manager.gameState == GameState.Playing) {
                 // Key checks for player 1
                 if (state.IsKeyDown(Keys.W)) {
                     manager.MovePlayer(1, -manager.playerOne.speed * deltaTime);
@@ -120,11 +107,16 @@ namespace Pong {
                 }
             }
 
+            if (manager.gameState == GameState.End)
+            { 
+                //TODO: press space to restart game
+                //TODO: display who won
+            
+            }
+                // Call the ball move function to make sure the ball stays moving
+                // TO-DO Kijken of de bal er uberhaupt is op dat moment, anders niet callen
 
-            // Call the ball move function to make sure the ball stays moving
-            // TO-DO Kijken of de bal er uberhaupt is op dat moment, anders niet callen
-
-            manager.ball.MoveBallNormal(deltaTime, new Vector2(screenWidth, screenHeight));
+                manager.ball.MoveBallNormal(deltaTime, new Vector2(screenWidth, screenHeight));
 
             manager.CheckCollision();
 
@@ -139,7 +131,7 @@ namespace Pong {
             GraphicsDevice.Clear(Color.Beige);
             
             //if game state is 'menu', draw the menu
-            if (gameState == GameState.Menu) {
+            if (manager.gameState == GameState.Menu) {
                 _spriteBatch.Begin();
                 _spriteBatch.Draw(pongArt, new Vector2((screenWidth / 2 - 411), 
                     (screenHeight / 2 - 159)), Color.White);
@@ -149,7 +141,7 @@ namespace Pong {
             }
 
             // if the game state is 'playing' draw the game
-            if (gameState == GameState.Playing) {
+            if (manager.gameState == GameState.Playing) {
                 _spriteBatch.Begin();
                 _spriteBatch.Draw(bluePlayer, manager.playerOne.GetPos(), Color.White);
                 _spriteBatch.Draw(redPlayer, manager.playerTwo.GetPos(), Color.White);
@@ -158,9 +150,13 @@ namespace Pong {
                 _spriteBatch.DrawString(fontBig, Convert.ToString(manager.playerTwo.GetLives()), new Vector2(screenWidth - 25, 10), Color.Black);
                 _spriteBatch.End();
             }
-            
- 
-            base.Draw(gameTime);
+
+            if (manager.gameState == GameState.End) {
+                _spriteBatch.Begin();
+                _spriteBatch.DrawString(fontBig, "END OF THE GAME \nPress space to restart \nPress escape to exit", new Vector2(screenWidth/2-120, screenHeight/2 - 150), Color.Black);
+                _spriteBatch.End();
+            }
+                base.Draw(gameTime);
         }
     }
 }

@@ -3,6 +3,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace Pong {
+    //game states
+    public enum GameState
+    {
+        Menu,
+        Playing,
+        Pause,
+        End
+    }
     public class GameManager {
 
         // Game setting variables
@@ -21,6 +29,9 @@ namespace Pong {
 
         public ScoreObject scoreOne;
         public ScoreObject scoreTwo;
+
+        //gamestate
+        public GameState gameState;
 
         public GameManager(int startLivesParam, int percSpace = 20) {
             
@@ -110,8 +121,10 @@ namespace Pong {
 
             scoreOne = new ScoreObject(percScreenSpace, screenWidth);
             scoreTwo = new ScoreObject(percScreenSpace, screenWidth);
-        }
 
+            gameState = new GameState();
+            gameState = GameState.Menu;
+        }
 
         public void CheckCollision()
         {
@@ -177,7 +190,7 @@ namespace Pong {
             ball.Respawn(ballStartPos, ballDefaultSpeed, generateDirection()) ;
 
             if (playerOne.GetLives() == 0 || playerTwo.GetLives() == 0) {
-
+                gameState = GameState.End;
             }
         }
     }

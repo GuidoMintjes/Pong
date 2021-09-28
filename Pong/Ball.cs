@@ -8,7 +8,7 @@ namespace Pong {
         private Vector2 position;
         private Vector2 direction = new Vector2(-1, -1);
         private float speed;
-        private float speedup = 0.5F;
+        private float speedup = 10F;
 
 
         public Vector2 GetPos() {
