@@ -14,9 +14,6 @@ namespace Pong {
 
     public class GameManager {
 
-        double angle;
-        double inObjDistance;
-
         // Game setting variables
         public int startLives;
         public int percSpaceToPlayer;
@@ -121,11 +118,10 @@ namespace Pong {
             playerTwo = new Player(2, calcPlayerStartPos(2), startLives,
                                     new Vector2(width, height));
 
-            if (defaultBallPos)
-                ballStartPos = new Vector2(300, 300);
-                    
-                    //new Vector2((width / 2) - Constants.DEFAULTBALLWIDTH, 
-                    //(height / 2) - Constants.DEFAULTBALLHEIGHT);   // Calculate middle of screen to spawn ball,
+            if (defaultBallPos) {
+                ballStartPos = new Vector2((width / 2) - Constants.DEFAULTBALLWIDTH,
+                    (height / 2) - Constants.DEFAULTBALLHEIGHT);
+            }  // Calculate middle of screen to spawn ball,
                                                             // keeping in mind ball dimensions
 
             ball = new Ball(ballStartPos, ballDefaultSpeed);
@@ -137,34 +133,18 @@ namespace Pong {
             gameState = GameState.Menu;
         }
 
-        public void CheckCollision()
+        public void CheckCollisions()
         {
-
             Vector2 ballPos = ball.GetPos();
-            Vector2 ballOrigin = ball.GetOrigin();
-            Vector2 playerOnePos = playerOne.GetPos();
-            Vector2 playerOrigin = playerOne.GetOrigin();
-            Vector2 playerTwoPos = playerTwo.GetPos();
-
-            Vector2 ballCenter = ballPos + ballOrigin;
-            Vector2 playerOneCenter = playerOnePos + playerOrigin;
-            Vector2 playerTwoCenter = playerTwoPos + playerOrigin;
-
-
-            double dis1 = (calcDistance(ballCenter, playerOneCenter, playerOrigin));
-            bool bounce = (dis1 <= 0);
-
-            //check if ball is hitting player1
-            if (bounce) {
+            Rectangle ballBox = ball.GetHitBox();
+            Rectangle playerOneBox = playerOne.GetHitBox();
+            Rectangle playerTwoBox = playerTwo.GetHitBox();
+            
+            if (CheckCollision(ballBox, playerOneBox)) {
                 ball.BounceOffPlayer(1);
-                Console.WriteLine("Distance p1 is " + dis1 + "\n" + bounce);
-                Console.WriteLine("inobj is " + inObjDistance);
-                Console.WriteLine("angle is " + angle);
-                Console.WriteLine("math cos " + Math.Cos(angle));
             }
 
-            //check if ball is hitting player2
-            if (calcDistance(ballCenter, playerTwoCenter, playerOrigin) <= 0) {
+            if (CheckCollision(ballBox, playerTwoBox)) {
                 ball.BounceOffPlayer(1);
             }
 
@@ -183,52 +163,14 @@ namespace Pong {
             }
         }
 
-        public double calcDistance(Vector2 posBal, Vector2 posObj, Vector2 originObj) {
+        public bool CheckCollision (Rectangle obj1, Rectangle obj2) {
 
-
-            float disX;
-            float disY;
-            //total X&Y distance
-            if (posBal.X > posObj.X ) {
-                disX = posBal.X - posObj.X;
-                Console.WriteLine(disX + " disX");
-            }   
-            else { 
-                disX = posObj.X - posBal.X;
-                Console.WriteLine(disX + " disX");
-            }
-            disY = Math.Abs(posBal.Y - posObj.Y);
-
-            //Angle of object that is being compared with ball
-            this.angle = Math.Atan2(disY, disX);
-   
-
-            //total distance from center to center of ball & object
-            double disTotal = Math.Sqrt(disX*disX + disY*disY);
-            
-
-            //part of the distance that is inside the object
-            if (angle > 1.5 ) {
-                this.inObjDistance = 48;
-            }
-            else if (Math.Cos(angle) <= 0.06) {
-                this.inObjDistance = 8;
-            }
-            else {
-                this.inObjDistance = (originObj.X / Math.Cos(angle));
-            }
-
-            //distance between the objects (ball is circle so radius can be used)
-            double dis = disTotal - (float)inObjDistance;// - ball.GetOrigin().X;
-
-            Console.WriteLine(inObjDistance + " inobj");
-            Console.WriteLine(disTotal + " total");
-            Console.WriteLine(dis + "goede dis \n");
-
-            return dis;  
+            return obj1.Left < obj2.Right &&
+                    obj1.Right > obj2.Left &&
+                    obj1.Top < obj2.Bottom &&
+                    obj1.Bottom > obj2.Top;
 
         }
-
 
 
 
