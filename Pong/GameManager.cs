@@ -121,12 +121,12 @@ namespace Pong {
             playerTwo = new Player(2, calcPlayerStartPos(2), startLives,
                                     new Vector2(width, height));
 
-            if (defaultBallPos)
-                ballStartPos = new Vector2(300, 300);
-                    
-                    //new Vector2((width / 2) - Constants.DEFAULTBALLWIDTH, 
-                    //(height / 2) - Constants.DEFAULTBALLHEIGHT);   // Calculate middle of screen to spawn ball,
-                                                            // keeping in mind ball dimensions
+            if (defaultBallPos) {
+
+                ballStartPos = new Vector2((width / 2) - Constants.DEFAULTBALLWIDTH,
+                            (height / 2) - Constants.DEFAULTBALLHEIGHT);    // Calculate middle of screen to spawn ball,
+                                                                            // keeping in mind ball dimensions
+            }
 
             ball = new Ball(ballStartPos, ballDefaultSpeed);
 
