@@ -14,6 +14,9 @@ namespace Pong {
 
     public class GameManager {
 
+        double angle;
+        double inObjDistance;
+
         // Game setting variables
         public int startLives;
         public int percSpaceToPlayer;
@@ -119,8 +122,10 @@ namespace Pong {
                                     new Vector2(width, height));
 
             if (defaultBallPos)
-                ballStartPos = new Vector2((width / 2) - Constants.DEFAULTBALLWIDTH, 
-                    (height / 2) - Constants.DEFAULTBALLHEIGHT);   // Calculate middle of screen to spawn ball,
+                ballStartPos = new Vector2(300, 300);
+                    
+                    //new Vector2((width / 2) - Constants.DEFAULTBALLWIDTH, 
+                    //(height / 2) - Constants.DEFAULTBALLHEIGHT);   // Calculate middle of screen to spawn ball,
                                                             // keeping in mind ball dimensions
 
             ball = new Ball(ballStartPos, ballDefaultSpeed);
@@ -146,14 +151,16 @@ namespace Pong {
             Vector2 playerTwoCenter = playerTwoPos + playerOrigin;
 
 
-            int dis1 = Convert.ToInt32(Math.Abs(calcDistance(ballCenter, playerOneCenter, playerOrigin)));
-            bool bounce = (dis1 < 0);
-            //Console.WriteLine("Distance p1 is " + dis1 +"\n"+bounce);
+            double dis1 = (calcDistance(ballCenter, playerOneCenter, playerOrigin));
+            bool bounce = (dis1 <= 0);
 
             //check if ball is hitting player1
             if (bounce) {
                 ball.BounceOffPlayer(1);
                 Console.WriteLine("Distance p1 is " + dis1 + "\n" + bounce);
+                Console.WriteLine("inobj is " + inObjDistance);
+                Console.WriteLine("angle is " + angle);
+                Console.WriteLine("math cos " + Math.Cos(angle));
             }
 
             //check if ball is hitting player2
@@ -176,23 +183,47 @@ namespace Pong {
             }
         }
 
-        public float calcDistance(Vector2 posBal, Vector2 posObj, Vector2 originObj) {
+        public double calcDistance(Vector2 posBal, Vector2 posObj, Vector2 originObj) {
 
+
+            float disX;
+            float disY;
             //total X&Y distance
-            float disX = Math.Abs(posBal.X - posObj.X);
-            float disY = Math.Abs(posBal.Y - posObj.Y);
+            if (posBal.X > posObj.X ) {
+                disX = posBal.X - posObj.X;
+                Console.WriteLine(disX + " disX");
+            }   
+            else { 
+                disX = posObj.X - posBal.X;
+                Console.WriteLine(disX + " disX");
+            }
+            disY = Math.Abs(posBal.Y - posObj.Y);
 
             //Angle of object that is being compared with ball
-            float Angle = (float)Math.Atan2(disY, disX);
+            this.angle = Math.Atan2(disY, disX);
+   
 
             //total distance from center to center of ball & object
-            float disTotal = (float)(disX / Math.Cos(Angle));
+            double disTotal = Math.Sqrt(disX*disX + disY*disY);
+            
 
             //part of the distance that is inside the object
-            float inObjDistance = (float)(originObj.X / Math.Cos(Angle));
+            if (angle > 1.5 ) {
+                this.inObjDistance = 48;
+            }
+            else if (Math.Cos(angle) <= 0.06) {
+                this.inObjDistance = 8;
+            }
+            else {
+                this.inObjDistance = (originObj.X / Math.Cos(angle));
+            }
 
             //distance between the objects (ball is circle so radius can be used)
-            float dis = disTotal - inObjDistance - ball.GetOrigin().X;
+            double dis = disTotal - (float)inObjDistance;// - ball.GetOrigin().X;
+
+            Console.WriteLine(inObjDistance + " inobj");
+            Console.WriteLine(disTotal + " total");
+            Console.WriteLine(dis + "goede dis \n");
 
             return dis;  
 

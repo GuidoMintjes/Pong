@@ -25,7 +25,7 @@ namespace Pong {
         public Pong() {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = false;
+            IsMouseVisible = true;
         }
 
     protected override void Initialize() {
@@ -74,6 +74,7 @@ namespace Pong {
 
             // Save current keyboard 'state' and check if player wants to exit
             KeyboardState state = Keyboard.GetState();
+
             if (state.IsKeyDown(Keys.Escape)) Exit();
 
 
@@ -112,6 +113,11 @@ namespace Pong {
                     manager.gameState = GameState.Pause;
                     
                 }
+
+                //move the ball if playing
+                manager.ball.MoveBallNormal(deltaTime, new Vector2(screenWidth, screenHeight));
+
+                manager.CheckCollision();
             }
              
             if (manager.gameState == GameState.Pause) {
@@ -119,13 +125,6 @@ namespace Pong {
                 {
                     manager.gameState = GameState.Playing;
                 }
-            }
-
-            else { //if not paused
-                // Call the ball move function to make sure the ball stays moving
-                manager.ball.MoveBallNormal(deltaTime, new Vector2(screenWidth, screenHeight));
-
-                manager.CheckCollision();
             }
 
             if (manager.gameState == GameState.End) { 
