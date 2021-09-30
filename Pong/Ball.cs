@@ -56,8 +56,12 @@ namespace Pong {
             SetPos(newPos);
         }
 
-        public void BounceOffPlayer() {
-            direction.X *= -1;
+        public void BounceOffPlayer(int directionn) {
+            if  (directionn == 1) {
+                direction.X *= -1;
+            } else if (directionn == 2) {
+                direction.Y *= -1;
+            }
         }
 
 

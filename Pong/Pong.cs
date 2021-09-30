@@ -105,21 +105,36 @@ namespace Pong {
                 if (state.IsKeyDown(Keys.Down)) {
                     manager.MovePlayer(2, manager.playerTwo.speed * deltaTime);
                 }
+
+                // Key to pause game
+                if (state.IsKeyDown(Keys.P ))
+                {
+                    manager.gameState = GameState.Pause;
+                    
+                }
+            }
+             
+            if (manager.gameState == GameState.Pause) {
+                if (state.IsKeyDown(Keys.Space))
+                {
+                    manager.gameState = GameState.Playing;
+                }
             }
 
-            if (manager.gameState == GameState.End)
-            { 
-                //TODO: press space to restart game
-                //TODO: display who won
-            
-            }
+            else { //if not paused
                 // Call the ball move function to make sure the ball stays moving
-                // TO-DO Kijken of de bal er uberhaupt is op dat moment, anders niet callen
-
                 manager.ball.MoveBallNormal(deltaTime, new Vector2(screenWidth, screenHeight));
 
-            manager.CheckCollision();
+                manager.CheckCollision();
+            }
 
+            if (manager.gameState == GameState.End) { 
+                
+                if (state.IsKeyDown(Keys.Space))
+                {
+                    manager.RestartGame();
+                }
+            }
 
             base.Update(gameTime);
         }
@@ -135,7 +150,7 @@ namespace Pong {
                 _spriteBatch.Begin();
                 _spriteBatch.Draw(pongArt, new Vector2((screenWidth / 2 - 411), 
                     (screenHeight / 2 - 159)), Color.White);
-                _spriteBatch.DrawString(font, "Press space to start \nPlayer one: W + D \nPlayer two: Up + Down", 
+                _spriteBatch.DrawString(font, "Press space to start \nPress P to pause \nPlayer one: W + D \nPlayer two: Up + Down", 
                     new Vector2((screenWidth / 2 - 80), (screenHeight / 2 + 179 )), Color.Black); 
                 _spriteBatch.End();
             }
@@ -153,10 +168,19 @@ namespace Pong {
 
             if (manager.gameState == GameState.End) {
                 _spriteBatch.Begin();
-                _spriteBatch.DrawString(fontBig, "END OF THE GAME \nPress space to restart \nPress escape to exit", new Vector2(screenWidth/2-120, screenHeight/2 - 150), Color.Black);
+                _spriteBatch.DrawString(fontBig, "END OF THE GAME \nWinner: " + manager.GetWinner() + "\n\nPress space to restart \nPress escape to exit",
+                    new Vector2(screenWidth / 2 - 120, screenHeight / 2 - 150), Color.Black) ;
                 _spriteBatch.End();
             }
-                base.Draw(gameTime);
+
+            if (manager.gameState == GameState.Pause)
+            {
+                _spriteBatch.Begin();
+                _spriteBatch.DrawString(fontBig, "GAME PAUSED \nPress space to resume \nPress escape to exit",
+                    new Vector2(screenWidth / 2 - 120, screenHeight / 2 - 150), Color.Black);
+                _spriteBatch.End();
+            }
+            base.Draw(gameTime);
         }
     }
 }

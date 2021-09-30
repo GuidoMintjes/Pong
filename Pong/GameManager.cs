@@ -11,6 +11,7 @@ namespace Pong {
         Pause,
         End
     }
+
     public class GameManager {
 
         // Game setting variables
@@ -29,9 +30,10 @@ namespace Pong {
 
         public ScoreObject scoreOne;
         public ScoreObject scoreTwo;
+        private string winner;
 
         //gamestate
-        public GameState gameState;
+        public GameState gameState { get; set; }
 
         public GameManager(int startLivesParam, int percSpace = 20) {
             
@@ -40,6 +42,10 @@ namespace Pong {
             percSpaceToPlayer = percSpace;
         }
 
+        public string GetWinner()
+        {
+            return winner;
+        }
 
         public Vector2 calcPlayerStartPos(int playerTeam) {
 
@@ -141,7 +147,7 @@ namespace Pong {
                 if (ballPos.Y > playerOnePos.Y &&
                     ballPos.Y < (playerOnePos.Y + Constants.DEFAULTPLAYERHEIGHT))
                 {
-                    ball.BounceOffPlayer();
+                    ball.BounceOffPlayer(1);
                 }
             }
 
@@ -153,9 +159,28 @@ namespace Pong {
                 if (ballPos.Y > playerTwoPos.Y &&
                     ballPos.Y < (playerTwoPos.Y + Constants.DEFAULTPLAYERHEIGHT))
                 {
-                    ball.BounceOffPlayer();
+                    ball.BounceOffPlayer(1);
                 }
             }
+
+
+            // Check if ball is hitting player on side
+            if (ballPos.X < (screenWidth / 2)) {
+                
+                if(ballPos.Y >= playerOnePos.Y && ballPos.X < (playerOnePos.X + Constants.DEFAULTPLAYERWIDTH) &&
+                    ballPos.X > playerOnePos.X) {
+
+                    ball.BounceOffPlayer(2);
+                }
+
+                if((ballPos.Y + Constants.DEFAULTBALLHEIGHT) < playerOnePos.Y && 
+                    ballPos.X < (playerOnePos.X + Constants.DEFAULTPLAYERWIDTH) &&
+                    ballPos.X > playerOnePos.X) {
+
+                    ball.BounceOffPlayer(2);
+                }
+            }
+
 
             // Check if ball is hitting score object on left side
             if (ballPos.X < scoreOne.GetSSX())
@@ -171,8 +196,9 @@ namespace Pong {
                 Score(1);
             }
         }
-        
-        public void Score(int team) {
+
+        public void Score(int team)
+        {
             switch (team)
             {
                 case 1:
@@ -187,11 +213,23 @@ namespace Pong {
                     break;
             }
 
-            ball.Respawn(ballStartPos, ballDefaultSpeed, generateDirection()) ;
+            ball.Respawn(ballStartPos, ballDefaultSpeed, generateDirection());
 
-            if (playerOne.GetLives() == 0 || playerTwo.GetLives() == 0) {
+            if (playerOne.GetLives() <= 0)
+            {
                 gameState = GameState.End;
+                winner = "Player two";
             }
+            else if (playerTwo.GetLives() <= 0)
+            {
+                gameState = GameState.End;
+                winner = "Player one";
+            }
+        }
+
+        public void RestartGame() { 
+            InitialiseGame(screenWidth, screenHeight, false, Constants.DEFAULTSCREENSPACEPERC);
+
         }
     }
 }
