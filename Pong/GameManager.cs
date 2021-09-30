@@ -136,51 +136,30 @@ namespace Pong {
         {
 
             Vector2 ballPos = ball.GetPos();
+            Vector2 ballOrigin = ball.GetOrigin();
             Vector2 playerOnePos = playerOne.GetPos();
+            Vector2 playerOrigin = playerOne.GetOrigin();
             Vector2 playerTwoPos = playerTwo.GetPos();
 
-            // Check if ball is hitting player on left side
-            if (ballPos.X < (screenWidth / 2) &&
-                ballPos.X < (playerOnePos.X + Constants.DEFAULTPLAYERWIDTH))
-            {
+            Vector2 ballCenter = ballPos + ballOrigin;
+            Vector2 playerOneCenter = playerOnePos + playerOrigin;
+            Vector2 playerTwoCenter = playerTwoPos + playerOrigin;
 
-                if (ballPos.Y > playerOnePos.Y &&
-                    ballPos.Y < (playerOnePos.Y + Constants.DEFAULTPLAYERHEIGHT))
-                {
-                    ball.BounceOffPlayer(1);
-                }
+
+            int dis1 = Convert.ToInt32(Math.Abs(calcDistance(ballCenter, playerOneCenter, playerOrigin)));
+            bool bounce = (dis1 < 0);
+            //Console.WriteLine("Distance p1 is " + dis1 +"\n"+bounce);
+
+            //check if ball is hitting player1
+            if (bounce) {
+                ball.BounceOffPlayer(1);
+                Console.WriteLine("Distance p1 is " + dis1 + "\n" + bounce);
             }
 
-            // Check if ball is hitting player on right side
-            if (ballPos.X > (screenWidth / 2) &&
-                (ballPos.X + Constants.DEFAULTBALLWIDTH) > playerTwoPos.X)
-            {
-
-                if (ballPos.Y > playerTwoPos.Y &&
-                    ballPos.Y < (playerTwoPos.Y + Constants.DEFAULTPLAYERHEIGHT))
-                {
-                    ball.BounceOffPlayer(1);
-                }
+            //check if ball is hitting player2
+            if (calcDistance(ballCenter, playerTwoCenter, playerOrigin) <= 0) {
+                ball.BounceOffPlayer(1);
             }
-
-
-            // Check if ball is hitting player on side
-            if (ballPos.X < (screenWidth / 2)) {
-                
-                if(ballPos.Y >= playerOnePos.Y && ballPos.X < (playerOnePos.X + Constants.DEFAULTPLAYERWIDTH) &&
-                    ballPos.X > playerOnePos.X) {
-
-                    ball.BounceOffPlayer(2);
-                }
-
-                if((ballPos.Y + Constants.DEFAULTBALLHEIGHT) < playerOnePos.Y && 
-                    ballPos.X < (playerOnePos.X + Constants.DEFAULTPLAYERWIDTH) &&
-                    ballPos.X > playerOnePos.X) {
-
-                    ball.BounceOffPlayer(2);
-                }
-            }
-
 
             // Check if ball is hitting score object on left side
             if (ballPos.X < scoreOne.GetSSX())
@@ -196,6 +175,31 @@ namespace Pong {
                 Score(1);
             }
         }
+
+        public float calcDistance(Vector2 posBal, Vector2 posObj, Vector2 originObj) {
+
+            //total X&Y distance
+            float disX = Math.Abs(posBal.X - posObj.X);
+            float disY = Math.Abs(posBal.Y - posObj.Y);
+
+            //Angle of object that is being compared with ball
+            float Angle = (float)Math.Atan2(disY, disX);
+
+            //total distance from center to center of ball & object
+            float disTotal = (float)(disX / Math.Cos(Angle));
+
+            //part of the distance that is inside the object
+            float inObjDistance = (float)(originObj.X / Math.Cos(Angle));
+
+            //distance between the objects (ball is circle so radius can be used)
+            float dis = disTotal - inObjDistance - ball.GetOrigin().X;
+
+            return dis;  
+
+        }
+
+
+
 
         public void Score(int team)
         {
