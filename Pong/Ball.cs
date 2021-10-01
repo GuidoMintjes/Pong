@@ -5,7 +5,7 @@ namespace Pong {
     public class Ball {
 
         // Variables related to position, speed, appearance, collider
-        private Vector2 position, origin;
+        private Vector2 position;
         private Vector2 direction = new Vector2(-1, -1);
         private float speed;
         private float speedup = 10F;
@@ -35,7 +35,7 @@ namespace Pong {
 
             position = startPos;
             speed = defaultSpeed;
-            hitBox = new Rectangle((int)position.X, (int)position.Y, Constants.DEFAULTBALLWIDTH, Constants.DEFAULTPLAYERHEIGHT);
+            hitBox = new Rectangle((int)position.X, (int)position.Y, Constants.DEFAULTBALLWIDTH, Constants.DEFAULTBALLHEIGHT);
         }
 
 

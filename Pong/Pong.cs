@@ -157,9 +157,9 @@ namespace Pong {
             // if the game state is 'playing' draw the game
             if (manager.gameState == GameState.Playing) {
                 _spriteBatch.Begin();
-                _spriteBatch.Draw(bluePlayer, manager.playerOne.GetPos(), Color.White);
-                _spriteBatch.Draw(redPlayer, manager.playerTwo.GetPos(), Color.White);
-                _spriteBatch.Draw(ball, manager.ball.GetPos(), Color.White);
+                _spriteBatch.Draw(bluePlayer, manager.playerOne.GetHitBox(), Color.White);
+                _spriteBatch.Draw(redPlayer, manager.playerTwo.GetHitBox(), Color.White);
+                _spriteBatch.Draw(ball, manager.ball.GetHitBox(), Color.White);
                 _spriteBatch.DrawString(fontBig, Convert.ToString(manager.playerOne.GetLives()) , new Vector2(10,10), Color.Black);
                 _spriteBatch.DrawString(fontBig, Convert.ToString(manager.playerTwo.GetLives()), new Vector2(screenWidth - 25, 10), Color.Black);
                 _spriteBatch.End();

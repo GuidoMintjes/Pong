@@ -27,10 +27,14 @@ namespace Pong {
         public Player playerOne;
         public Player playerTwo;
         public Ball ball;
-
+        
+        //score
         public ScoreObject scoreOne;
         public ScoreObject scoreTwo;
         private string winner;
+
+        //collision
+        private int lastHit;
 
         //gamestate
         public GameState gameState { get; set; }
@@ -140,12 +144,14 @@ namespace Pong {
             Rectangle playerOneBox = playerOne.GetHitBox();
             Rectangle playerTwoBox = playerTwo.GetHitBox();
             
-            if (CheckCollision(ballBox, playerOneBox)) {
+            if (CheckCollision(ballBox, playerOneBox) && lastHit != 1) {
                 ball.BounceOffPlayer(1);
+                lastHit = 1;
             }
 
-            if (CheckCollision(ballBox, playerTwoBox)) {
+            if (CheckCollision(ballBox, playerTwoBox) && lastHit != 2) {
                 ball.BounceOffPlayer(1);
+                lastHit = 2;
             }
 
             // Check if ball is hitting score object on left side
@@ -191,6 +197,7 @@ namespace Pong {
             }
 
             ball.Respawn(ballStartPos, ballDefaultSpeed, generateDirection());
+            lastHit = 0;
 
             if (playerOne.GetLives() <= 0)
             {
