@@ -167,11 +167,9 @@ namespace Pong {
 
             }
 
+        //public void draw(GameTime gametime, SpriteBatch spriteBatch);
         }
 
-        public void draw( GameTime gametime, SpriteBatch spriteBatch)
-        
-        }
 
 
         public void CheckCollisions()
