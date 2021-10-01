@@ -11,9 +11,10 @@ namespace Pong {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        Texture2D ball;
+        Texture2D ball; 
         Texture2D bluePlayer, redPlayer;
-        Texture2D pongArt;
+        Texture2D pongArt; //splashscreen
+        Texture2D peer; //powerups
 
         SpriteFont font, fontBig;
 
@@ -58,12 +59,16 @@ namespace Pong {
         protected override void LoadContent() {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            
+            //ball+player+splashscreen
             ball = Content.Load<Texture2D>("Sprites/bal");
             bluePlayer = Content.Load<Texture2D>("Sprites/blauweSpeler");
             redPlayer = Content.Load<Texture2D>("Sprites/rodeSpeler");
             pongArt = Content.Load<Texture2D>("Sprites/PONG");
 
+            //powerups
+            peer = Content.Load<Texture2D>("Sprites/Peer");
+
+            //fonts
             font = Content.Load<SpriteFont>("fonts/file");
             fontBig = Content.Load<SpriteFont>("fonts/file2");
         }
@@ -118,6 +123,8 @@ namespace Pong {
                 manager.ball.MoveBallNormal(deltaTime, new Vector2(screenWidth, screenHeight));
 
                 manager.CheckCollisions();
+
+                manager.PowerupsTimer(deltaTime);
             }
              
             if (manager.gameState == GameState.Pause) {
@@ -160,6 +167,7 @@ namespace Pong {
                 _spriteBatch.Draw(bluePlayer, manager.playerOne.GetHitBox(), Color.White);
                 _spriteBatch.Draw(redPlayer, manager.playerTwo.GetHitBox(), Color.White);
                 _spriteBatch.Draw(ball, manager.ball.GetHitBox(), Color.White);
+                manager.drawPowerups();
                 _spriteBatch.DrawString(fontBig, Convert.ToString(manager.playerOne.GetLives()) , new Vector2(10,10), Color.Black);
                 _spriteBatch.DrawString(fontBig, Convert.ToString(manager.playerTwo.GetLives()), new Vector2(screenWidth - 25, 10), Color.Black);
                 _spriteBatch.End();

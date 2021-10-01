@@ -28,13 +28,16 @@ namespace Pong {
         public Player playerTwo;
         public Ball ball;
         
-        //score
+        //miscellanious
         public ScoreObject scoreOne;
         public ScoreObject scoreTwo;
         private string winner;
 
-        //collision
         private int lastHit;
+
+        static Random rng = new Random();
+        float counter;
+        int timer = rng.Next(0,10);
 
         //gamestate
         public GameState gameState { get; set; }
@@ -65,10 +68,9 @@ namespace Pong {
             return new Vector2(playerX, playerY);
         }
 
-        public Vector2 generateDirection()
+        private Vector2 generateDirection()
         {
             Vector2 dir = new Vector2(0,0);
-            Random rng = new Random();
             switch (rng.Next(1, 5))
             {
                 case 1:
@@ -85,6 +87,12 @@ namespace Pong {
                     break;
             }
             return dir;
+        }
+
+        //generates a random position on screen
+        private Vector2 GeneratePosition() {
+
+            return new Vector2(rng.Next(0, screenWidth), rng.Next(0, screenHeight));
         }
 
 
@@ -137,6 +145,35 @@ namespace Pong {
             gameState = GameState.Menu;
         }
 
+        public void PowerupsTimer(float time) {
+            counter += time;
+
+            if (counter >= timer) {
+                SpawnPowerups();
+                counter = 0;
+                timer = rng.Next(0, 10);
+    
+            }
+        }
+
+        private void SpawnPowerups() {
+            int num = rng.Next(1, 1);
+
+            switch (num) {
+
+                case 1:
+                    Powerup peer = new Powerup(GeneratePosition());
+                    break;
+
+            }
+
+        }
+
+        public void draw( GameTime gametime, SpriteBatch spriteBatch)
+        
+        }
+
+
         public void CheckCollisions()
         {
             Vector2 ballPos = ball.GetPos();
@@ -169,7 +206,7 @@ namespace Pong {
             }
         }
 
-        public bool CheckCollision (Rectangle obj1, Rectangle obj2) {
+        private bool CheckCollision (Rectangle obj1, Rectangle obj2) {
 
             return obj1.Left < obj2.Right &&
                     obj1.Right > obj2.Left &&
@@ -178,9 +215,7 @@ namespace Pong {
 
         }
 
-
-
-        public void Score(int team)
+        private void Score(int team)
         {
             switch (team)
             {

@@ -5,20 +5,25 @@ using Microsoft.Xna.Framework;
 
 namespace Pong
 {
-    public class PowerupManager
+    public class Powerup
     {
         int width, height;
-        public Vector2 pos;
+        Vector2 position;
+        Rectangle hitBox;
 
-        public PowerupManager (){
-                
-            }
+        public Vector2 GetPos() {
+            return position;
+        }
 
-        public void InitialisePowerup() {
+
+        public Powerup (Vector2 pos){
+            position = pos;
             width = Constants.DEFAULTPOWERWIDTH;
             height = Constants.DEFAULTPOWERHEIGHT;
-            
+            hitBox = new Rectangle((int)position.X, (int)position.Y, width, height);
+        }
 
+        public void InitialisePowerups() {
 
         }
 

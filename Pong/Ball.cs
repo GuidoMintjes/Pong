@@ -44,11 +44,6 @@ namespace Pong {
             Vector2 combinedDir = direction * speed * deltaTime;
             Vector2 newPos = GetPos() + combinedDir;
 
-
-            if (newPos.X >= (screenSize.X - (Constants.DEFAULTBALLWIDTH)) || newPos.X <= 0) {
-                direction.X *= -1;
-            }
-
             if (newPos.Y >= (screenSize.Y - (Constants.DEFAULTBALLHEIGHT)) || newPos.Y <= 0) {
                 direction.Y *= -1;
             }
