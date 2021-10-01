@@ -8,7 +8,7 @@ namespace Pong {
         private Vector2 position;
         private Vector2 direction = new Vector2(-1, -1);
         private float speed;
-        private float speedup = 10F;
+        private float speedup = 2F;
         private Rectangle hitBox; 
 
         public Vector2 GetPos() {
@@ -56,11 +56,29 @@ namespace Pong {
             SetPos(newPos);
         }
 
-        public void BounceOffPlayer(int directionn) {
-            if  (directionn == 1) {
-                direction.X *= -1;
-            } else if (directionn == 2) {
-                direction.Y *= -1;
+        public void BounceOffPlayer(int directionCheck) {
+            if(directionCheck == 1) {
+
+                if (new Random().Next(1, 5) == 3) {
+                    Console.WriteLine("Reset bounce!");
+                    if(direction.X < -direction.X) {
+
+                        direction.X = 1;
+                    } else {
+
+                        direction.X = -1;
+                    }
+                } else {
+
+                    int randomnessX = new Random().Next(70, 200);
+                    float randomnessXF = randomnessX / 100f;
+
+                    Console.WriteLine(randomnessXF);
+
+                    direction.X *= -1f * randomnessXF;
+                }
+            } else if (directionCheck == 2) {
+                direction.Y *= -1f;
             }
         }
 
