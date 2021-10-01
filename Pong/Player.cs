@@ -6,13 +6,12 @@ namespace Pong {
 
         // Variables related to miscellaneous
         private float screenX, screenY;
-        private const int padelHeight = 96;
-        private const int padelWidth = 16;
 
         // Variables related to padel main usage
         private int padelTeam;
         private int lives;
         private Vector2 position;
+        private Rectangle hitBox;
 
         // Variables related to padel extended usage
         public float speed = 20;    // Also sets default speed
@@ -42,9 +41,9 @@ namespace Pong {
         public Vector2 GetPos() {
             return position;
         }
-        public Vector2 GetSize()
-        {
-            return new Vector2 (padelWidth,padelHeight);
+
+        public Rectangle GetHitBox() {
+            return hitBox;
         }
 
         public Player(int team, Vector2 pos, int startLives, Vector2 screenSize) {
@@ -52,6 +51,7 @@ namespace Pong {
             SetPos(pos);
             SetPadelTeam(team);
             SetLives(startLives);
+            hitBox = new Rectangle((int)pos.X, (int) pos.Y, Constants.DEFAULTPLAYERWIDTH, Constants.DEFAULTPLAYERHEIGHT);
 
             screenX = screenSize.X;
             screenY = screenSize.Y;
@@ -67,7 +67,8 @@ namespace Pong {
         public void ChangeVerticalPos(float amt) {
 
             float posY = GetPos().Y + amt;
-            posY = Math.Clamp(posY, 0, (screenY - padelHeight));
+            posY = Math.Clamp(posY, 0, (screenY - Constants.DEFAULTPLAYERHEIGHT));
+            hitBox.Y = (int)posY;
             SetPos(new Vector2(GetPos().X, posY));
         }
     }

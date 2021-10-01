@@ -27,10 +27,14 @@ namespace Pong {
         public Player playerOne;
         public Player playerTwo;
         public Ball ball;
-
+        
+        //score
         public ScoreObject scoreOne;
         public ScoreObject scoreTwo;
         private string winner;
+
+        //collision
+        private int lastHit;
 
         //gamestate
         public GameState gameState { get; set; }
@@ -118,9 +122,10 @@ namespace Pong {
             playerTwo = new Player(2, calcPlayerStartPos(2), startLives,
                                     new Vector2(width, height));
 
-            if (defaultBallPos)
-                ballStartPos = new Vector2((width / 2) - Constants.DEFAULTBALLWIDTH, 
-                    (height / 2) - Constants.DEFAULTBALLHEIGHT);   // Calculate middle of screen to spawn ball,
+            if (defaultBallPos) {
+                ballStartPos = new Vector2((width / 2) - Constants.DEFAULTBALLWIDTH,
+                    (height / 2) - Constants.DEFAULTBALLHEIGHT);
+            }  // Calculate middle of screen to spawn ball,
                                                             // keeping in mind ball dimensions
 
             ball = new Ball(ballStartPos, ballDefaultSpeed);
@@ -132,55 +137,22 @@ namespace Pong {
             gameState = GameState.Menu;
         }
 
-        public void CheckCollision()
+        public void CheckCollisions()
         {
-
             Vector2 ballPos = ball.GetPos();
-            Vector2 playerOnePos = playerOne.GetPos();
-            Vector2 playerTwoPos = playerTwo.GetPos();
-
-            // Check if ball is hitting player on left side
-            if (ballPos.X < (screenWidth / 2) &&
-                ballPos.X < (playerOnePos.X + Constants.DEFAULTPLAYERWIDTH))
-            {
-
-                if (ballPos.Y > playerOnePos.Y &&
-                    ballPos.Y < (playerOnePos.Y + Constants.DEFAULTPLAYERHEIGHT))
-                {
-                    ball.BounceOffPlayer(1);
-                }
+            Rectangle ballBox = ball.GetHitBox();
+            Rectangle playerOneBox = playerOne.GetHitBox();
+            Rectangle playerTwoBox = playerTwo.GetHitBox();
+            
+            if (CheckCollision(ballBox, playerOneBox) && lastHit != 1) {
+                ball.BounceOffPlayer(1);
+                lastHit = 1;
             }
 
-            // Check if ball is hitting player on right side
-            if (ballPos.X > (screenWidth / 2) &&
-                (ballPos.X + Constants.DEFAULTBALLWIDTH) > playerTwoPos.X)
-            {
-
-                if (ballPos.Y > playerTwoPos.Y &&
-                    ballPos.Y < (playerTwoPos.Y + Constants.DEFAULTPLAYERHEIGHT))
-                {
-                    ball.BounceOffPlayer(1);
-                }
+            if (CheckCollision(ballBox, playerTwoBox) && lastHit != 2) {
+                ball.BounceOffPlayer(1);
+                lastHit = 2;
             }
-
-
-            // Check if ball is hitting player on side
-            if (ballPos.X < (screenWidth / 2)) {
-                
-                if(ballPos.Y >= playerOnePos.Y && ballPos.X < (playerOnePos.X + Constants.DEFAULTPLAYERWIDTH) &&
-                    ballPos.X > playerOnePos.X) {
-
-                    ball.BounceOffPlayer(2);
-                }
-
-                if((ballPos.Y + Constants.DEFAULTBALLHEIGHT) < playerOnePos.Y && 
-                    ballPos.X < (playerOnePos.X + Constants.DEFAULTPLAYERWIDTH) &&
-                    ballPos.X > playerOnePos.X) {
-
-                    ball.BounceOffPlayer(2);
-                }
-            }
-
 
             // Check if ball is hitting score object on left side
             if (ballPos.X < scoreOne.GetSSX())
@@ -196,6 +168,17 @@ namespace Pong {
                 Score(1);
             }
         }
+
+        public bool CheckCollision (Rectangle obj1, Rectangle obj2) {
+
+            return obj1.Left < obj2.Right &&
+                    obj1.Right > obj2.Left &&
+                    obj1.Top < obj2.Bottom &&
+                    obj1.Bottom > obj2.Top;
+
+        }
+
+
 
         public void Score(int team)
         {
@@ -214,6 +197,7 @@ namespace Pong {
             }
 
             ball.Respawn(ballStartPos, ballDefaultSpeed, generateDirection());
+            lastHit = 0;
 
             if (playerOne.GetLives() <= 0)
             {

@@ -9,12 +9,14 @@ namespace Pong {
         private Vector2 direction = new Vector2(-1, -1);
         private float speed;
         private float speedup = 10F;
-
+        private Rectangle hitBox; 
 
         public Vector2 GetPos() {
             return position;
         }
-
+        public Rectangle GetHitBox() {
+            return hitBox;
+        }
 
         public void SetPos(Vector2 newPos) {
             position = newPos;
@@ -33,6 +35,7 @@ namespace Pong {
 
             position = startPos;
             speed = defaultSpeed;
+            hitBox = new Rectangle((int)position.X, (int)position.Y, Constants.DEFAULTBALLWIDTH, Constants.DEFAULTBALLHEIGHT);
         }
 
 
@@ -50,6 +53,8 @@ namespace Pong {
                 direction.Y *= -1;
             }
 
+            hitBox.X = (int)newPos.X;
+            hitBox.Y = (int)newPos.Y;
 
             speed += speedup * deltaTime;
 
