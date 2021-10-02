@@ -9,7 +9,8 @@ namespace Pong {
         private Vector2 direction = new Vector2(-1, -1);
         private float speed;
         private float speedup = 2F;
-        private Rectangle hitBox; 
+        private Rectangle hitBox;
+        private int lastWallHit;
 
         public Vector2 GetPos() {
             return position;
@@ -44,8 +45,14 @@ namespace Pong {
             Vector2 combinedDir = direction * speed * deltaTime;
             Vector2 newPos = GetPos() + combinedDir;
 
-            if (newPos.Y >= (screenSize.Y - (Constants.DEFAULTBALLHEIGHT)) || newPos.Y <= 0) {
+            if (newPos.Y >= (screenSize.Y - (Constants.DEFAULTBALLHEIGHT)) && lastWallHit != 2 )  {
                 direction.Y *= -1;
+                lastWallHit = 2;
+                Console.WriteLine("bottombounce");
+            }
+            if (newPos.Y <= 0 && lastWallHit != 1) {
+                direction.Y *= -1;
+                lastWallHit = 1;
             }
 
             hitBox.X = (int)newPos.X;
@@ -87,6 +94,7 @@ namespace Pong {
             position = pos;
             speed = newSpeed;
             direction = newDirection;
+            lastWallHit = 0;
          }
     }
 }
