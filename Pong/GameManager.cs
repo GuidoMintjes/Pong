@@ -43,11 +43,12 @@ namespace Pong {
 
         //powerups
         List<Powerup> powerupsList = new List<Powerup>();
+        bool firstPower = true;
         
         //misc
         static Random rng = new Random();
         float counter;
-        int timer = rng.Next(3,10);
+        int timer = rng.Next(1,1);
 
         //gamestate
         public GameState gameState { get; set; }
@@ -153,12 +154,20 @@ namespace Pong {
 
             gameState = new GameState();
             gameState = GameState.Menu;
+
         }
 
         public void PowerupsTimer(float time, ContentManager content) {
             counter += time;
             Console.WriteLine("timer: " + timer);
             Console.WriteLine("counter: " + counter);
+
+            if (firstPower) {
+                Powerup blank = new Powerup(new Vector2(-100, -100), content.Load<Texture2D>("Sprites/pixel"));
+                powerupsList.Add(blank);
+                timer = rng.Next(3, 10);
+                firstPower = false;
+            }
 
             if (counter >= timer) {
                 SpawnPowerups(content);
@@ -219,7 +228,6 @@ namespace Pong {
             foreach (Powerup p in powerupsList) {
                 if (CheckCollision(ballBox, p.GetBox()) ) {
                     p.DoThing(this);
-                    //p.Despawn();
                     removeIndex = powerupsList.IndexOf(p);
                 }
             }

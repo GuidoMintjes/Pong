@@ -38,7 +38,6 @@ namespace Pong
             height = Constants.DEFAULTPOWERHEIGHT;
             hitBox = new Rectangle((int)position.X, (int)position.Y, width, height);
             sprite = texture;
-            this.Type = Fruit.Peer;
         }
 
         public void DoThing(GameManager manager) {
@@ -47,14 +46,13 @@ namespace Pong
                 case Fruit.Peer:
                     manager.ball.SetSize(2, 2);
                     break;
+
+                case Fruit.Banaan:
+                    manager.ball.BounceOffPlayer(1);
+                    break;
             }
 
         }
-
-        //public void Despawn() {
-
-
-        //}
 
     }
 }

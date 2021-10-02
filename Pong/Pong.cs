@@ -14,7 +14,6 @@ namespace Pong {
         Texture2D ball; 
         Texture2D bluePlayer, redPlayer;
         Texture2D pongArt; //splashscreen
-        Texture2D peer; //powerups
 
         SpriteFont font, fontBig;
 
