@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace Pong {
     public class Ball {
@@ -54,7 +55,7 @@ namespace Pong {
             position = startPos;
             speed = defaultSpeed;
             hitBox = new Rectangle((int)position.X, (int)position.Y, Constants.DEFAULTBALLWIDTH, Constants.DEFAULTBALLHEIGHT);
-            sprite = sprite;
+            this.sprite = sprite;
         }
 
 
@@ -103,7 +104,11 @@ namespace Pong {
             }
         }
 
+        public void Despawn(List<Ball> list ) {
+            int ballIndex = list.IndexOf(this);
+            list.RemoveAt(ballIndex);
 
+        }
         public void Respawn(Vector2 pos, float newSpeed, Vector2 newDirection) {
             position = pos;
             speed = newSpeed;

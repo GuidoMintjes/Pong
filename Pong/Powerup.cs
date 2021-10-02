@@ -41,15 +41,16 @@ namespace Pong
             sprite = texture;
         }
 
-        public void DoThing(GameManager manager) {
+        public void DoThing(GameManager manager, Ball ball) {
             switch (Type) {
 
                 case Fruit.Peer:
-                    manager.ball.SetSize(2, 2);
+                    ball.SetSize(2, 2);
                     break;
 
                 case Fruit.Banaan:
-                    manager.ball.BounceOffPlayer(1);
+                    ball.BounceOffPlayer(1);
+                    ball.SetLastHit(0);
                     break;
 
                 case Fruit.Kers:

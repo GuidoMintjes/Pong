@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
-//using System.Collections;
 using System.Collections.Generic;
 
 
@@ -189,7 +188,7 @@ namespace Pong {
         }
 
         private void SpawnPowerups(ContentManager Content) {
-            int num = rng.Next(2, 4);
+            int num = rng.Next(3, 4);
 
             switch (num) {
 
@@ -233,54 +232,66 @@ namespace Pong {
             Rectangle playerOneBox = playerOne.GetHitBox();
             Rectangle playerTwoBox = playerTwo.GetHitBox();
             int hitIndex = 0;
+            int scoreIndex = 0;
+            int score = 0;
 
             foreach (Ball b in ballList) {
 
-                Rectangle ballBox = ball.GetHitBox();
+                Rectangle ballBox = b.GetHitBox();
 
                 if (CheckCollision(ballBox, playerOneBox) && b.GetLastHit() != 1) {
-                    ball.BounceOffPlayer(1);
+                    b.BounceOffPlayer(1);
                     b.SetLastHit(1);
                 }
 
                 if (CheckCollision(ballBox, playerTwoBox) && b.GetLastHit() != 2) {
-                    ball.BounceOffPlayer(1);
+                    b.BounceOffPlayer(1);
                     b.SetLastHit(2);
                 }
 
                 //check collisions with powerups
                 foreach (Powerup p in powerupsList) {
-                    if (CheckCollision(ballBox, p.GetBox())) {
-                        //p.DoThing(this);
+                    if (CheckCollision(ballBox, p.GetBox()) ) {
                         Console.WriteLine("hij is geraakt");
                         hitIndex = powerupsList.IndexOf(p);
                     }
                 }
-                //if (hitIndex != 0) {
-                  //  powerupsList.RemoveAt(hitIndex);
-                    //hitIndex = 0;
-                //}
+                if (hitIndex != 0 && powerupsList[hitIndex].Type != Fruit.Kers) {
+                    powerupsList[hitIndex].DoThing(this, b);
+                    powerupsList.RemoveAt(hitIndex);
+                    hitIndex = 0;
+                }
 
 
                 // Check if ball is hitting score object on left side
                 if (ballBox.X < scoreOne.GetSSX()) {
                     Console.WriteLine("Right player scores!");
-                    Score(2);
+                    scoreIndex = ballList.IndexOf(b);
+                    score = 2;
+                    //Score(2, b);
                 }
 
                 // Check if ball is hitting score object on right side
-                if ((ballBox.X + Constants.DEFAULTBALLWIDTH) > (screenWidth - scoreOne.GetSSX())) {
+                if ((ballBox.X + ballBox.Width) > (screenWidth - scoreOne.GetSSX())) {
                     Console.WriteLine("Left player scores!");
-                    Score(1);
+                    scoreIndex = ballList.IndexOf(b);
+                    score = 1;
+                    //Score(1, b);
                 }
             }
 
             if (hitIndex != 0) {
-                powerupsList[hitIndex].DoThing(this);
+                powerupsList[hitIndex].DoThing(this, ball);
                 Console.WriteLine("doet ding");
                 powerupsList.RemoveAt(hitIndex);
                 hitIndex = 0;
             }
+
+            if (score == 1) Score(1, ballList[scoreIndex]) ;
+
+            if (score == 2) Score(2, ballList[scoreIndex]) ;
+
+
         }
 
         private bool CheckCollision (Rectangle obj1, Rectangle obj2) {
@@ -292,7 +303,7 @@ namespace Pong {
 
         }
 
-        private void Score(int team)
+        private void Score(int team, Ball b)
         {
             switch (team)
             {
@@ -308,7 +319,11 @@ namespace Pong {
                     break;
             }
 
-            ball.Respawn(ballStartPos, ballDefaultSpeed, generateDirection());
+            if (ball == b) {
+                ball.Respawn(ballStartPos, ballDefaultSpeed, generateDirection());
+            } else {
+                b.Despawn(ballList);
+            }
 
             if (playerOne.GetLives() <= 0)
             {
