@@ -32,7 +32,8 @@ namespace Pong {
         public Player playerOne;
         public Player playerTwo;
         public Ball ball;
-        
+        List<Ball> ballList = new List<Ball>();
+
         //score
         public ScoreObject scoreOne;
         public ScoreObject scoreTwo;
@@ -148,6 +149,7 @@ namespace Pong {
                                                             // keeping in mind ball dimensions
 
             ball = new Ball(ballStartPos, ballDefaultSpeed);
+            ballList.Add(ball);
 
             scoreOne = new ScoreObject(percScreenSpace, screenWidth);
             scoreTwo = new ScoreObject(percScreenSpace, screenWidth);
@@ -157,10 +159,21 @@ namespace Pong {
 
         }
 
+        public void MoveBalls(float time, Vector2 screensize) {
+            foreach (Ball b in ballList) {
+                b.MoveBallNormal(time, screensize);
+
+            }
+        }
+
+        public void ExtraBall() {
+            string ballNameTemp = ("ball " + (ballList.Count + 1).ToString());
+            Ball "ball " + (ballList.Count + 1) = new Ball();
+
+        }
+
         public void PowerupsTimer(float time, ContentManager content) {
             counter += time;
-            Console.WriteLine("timer: " + timer);
-            Console.WriteLine("counter: " + counter);
 
             if (firstPower) {
                 Powerup blank = new Powerup(new Vector2(-100, -100), content.Load<Texture2D>("Sprites/pixel"));
@@ -178,7 +191,7 @@ namespace Pong {
         }
 
         private void SpawnPowerups(ContentManager Content) {
-            int num = rng.Next(1, 3);
+            int num = rng.Next(1, 4);
 
             switch (num) {
 
@@ -193,6 +206,12 @@ namespace Pong {
                     banaan.Type = Fruit.Banaan;
                     powerupsList.Add(banaan);
                     break;
+
+                case 3:
+                    Powerup kers = new Powerup(GeneratePosition(), Content.Load<Texture2D>("Sprites/Kerspng"));
+                    kers.Type = Fruit.Kers;
+                    powerupsList.Add(kers);
+                    break;
             }
 
         }
@@ -205,50 +224,51 @@ namespace Pong {
         }
 
 
-        public void CheckCollisions()
-        {
-            Vector2 ballPos = ball.GetPos();
-            Rectangle ballBox = ball.GetHitBox();
+        public void CheckCollisions() {
+
             Rectangle playerOneBox = playerOne.GetHitBox();
             Rectangle playerTwoBox = playerTwo.GetHitBox();
-            int removeIndex = 0;
 
-            
-            if (CheckCollision(ballBox, playerOneBox) && lastHit != 1) {
-                ball.BounceOffPlayer(1);
-                lastHit = 1;
-            }
+            foreach (Ball b in ballList) {
 
-            if (CheckCollision(ballBox, playerTwoBox) && lastHit != 2) {
-                ball.BounceOffPlayer(1);
-                lastHit = 2;
-            }
+                Rectangle ballBox = ball.GetHitBox();
+                int removeIndex = 0;
 
-            //check collisions with powerups
-            foreach (Powerup p in powerupsList) {
-                if (CheckCollision(ballBox, p.GetBox()) ) {
-                    p.DoThing(this);
-                    removeIndex = powerupsList.IndexOf(p);
+
+                if (CheckCollision(ballBox, playerOneBox) && lastHit != 1) {
+                    ball.BounceOffPlayer(1);
+                    lastHit = 1;
                 }
-            }
-            if (removeIndex != 0) {
-                powerupsList.RemoveAt(removeIndex);
-                removeIndex = 0;
-            }
+
+                if (CheckCollision(ballBox, playerTwoBox) && lastHit != 2) {
+                    ball.BounceOffPlayer(1);
+                    lastHit = 2;
+                }
+
+                //check collisions with powerups
+                foreach (Powerup p in powerupsList) {
+                    if (CheckCollision(ballBox, p.GetBox())) {
+                        p.DoThing(this);
+                        removeIndex = powerupsList.IndexOf(p);
+                    }
+                }
+                if (removeIndex != 0) {
+                    powerupsList.RemoveAt(removeIndex);
+                    removeIndex = 0;
+                }
 
 
-            // Check if ball is hitting score object on left side
-            if (ballBox.X < scoreOne.GetSSX())
-            {
-                Console.WriteLine("Right player scores!");
-                Score(2);
-            }
+                // Check if ball is hitting score object on left side
+                if (ballBox.X < scoreOne.GetSSX()) {
+                    Console.WriteLine("Right player scores!");
+                    Score(2);
+                }
 
-            // Check if ball is hitting score object on right side
-            if ((ballBox.X + Constants.DEFAULTBALLWIDTH) > (screenWidth - scoreOne.GetSSX()))
-            {
-                Console.WriteLine("Left player scores!");
-                Score(1);
+                // Check if ball is hitting score object on right side
+                if ((ballBox.X + Constants.DEFAULTBALLWIDTH) > (screenWidth - scoreOne.GetSSX())) {
+                    Console.WriteLine("Left player scores!");
+                    Score(1);
+                }
             }
         }
 

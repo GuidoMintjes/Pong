@@ -117,7 +117,7 @@ namespace Pong {
                 }
 
                 //move the ball if playing
-                manager.ball.MoveBallNormal(deltaTime, new Vector2(screenWidth, screenHeight));
+                manager.MoveBalls(deltaTime, new Vector2(screenWidth, screenHeight));
 
                 manager.CheckCollisions();
 

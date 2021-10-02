@@ -53,7 +53,6 @@ namespace Pong {
             if (newPos.Y >= (screenSize.Y - (hitBox.Height)) && lastWallHit != 2 )  {
                 direction.Y *= -1;
                 lastWallHit = 2;
-                Console.WriteLine("bottombounce");
             }
             if (newPos.Y <= 0 && lastWallHit != 1) {
                 direction.Y *= -1;

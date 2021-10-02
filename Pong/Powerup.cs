@@ -11,7 +11,8 @@ namespace Pong
         Peer,
         Banaan,
         Appel,
-        Druif
+        Druif,
+        Kers
     }
 
     public class Powerup
@@ -49,6 +50,10 @@ namespace Pong
 
                 case Fruit.Banaan:
                     manager.ball.BounceOffPlayer(1);
+                    break;
+
+                case Fruit.Kers:
+                    manager.ExtraBall();
                     break;
             }
 
