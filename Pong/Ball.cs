@@ -19,6 +19,11 @@ namespace Pong {
             return hitBox;
         }
 
+        public void SetSize (int width, int height) {
+            hitBox.Width *= width;
+            hitBox.Height *= height;
+        }
+
         public void SetPos(Vector2 newPos) {
             position = newPos;
         }
@@ -45,7 +50,7 @@ namespace Pong {
             Vector2 combinedDir = direction * speed * deltaTime;
             Vector2 newPos = GetPos() + combinedDir;
 
-            if (newPos.Y >= (screenSize.Y - (Constants.DEFAULTBALLHEIGHT)) && lastWallHit != 2 )  {
+            if (newPos.Y >= (screenSize.Y - (hitBox.Height)) && lastWallHit != 2 )  {
                 direction.Y *= -1;
                 lastWallHit = 2;
                 Console.WriteLine("bottombounce");
@@ -92,6 +97,8 @@ namespace Pong {
             speed = newSpeed;
             direction = newDirection;
             lastWallHit = 0;
+            hitBox.Width = Constants.DEFAULTBALLWIDTH;
+            hitBox.Height = Constants.DEFAULTBALLHEIGHT;
          }
     }
 }

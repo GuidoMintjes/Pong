@@ -47,7 +47,7 @@ namespace Pong {
         //misc
         static Random rng = new Random();
         float counter;
-        int timer = rng.Next(10,50);
+        int timer = rng.Next(3,10);
 
         //gamestate
         public GameState gameState { get; set; }
@@ -102,7 +102,7 @@ namespace Pong {
         //generates a random position on screen
         private Vector2 GeneratePosition() {
 
-            return new Vector2(rng.Next(0, screenWidth), rng.Next(0, screenHeight));
+            return new Vector2(rng.Next(0, screenWidth - 64 ), rng.Next(0, screenHeight - 64));
         }
 
 
@@ -163,23 +163,27 @@ namespace Pong {
             if (counter >= timer) {
                 SpawnPowerups(content);
                 counter = 0;
-                timer = rng.Next(10, 50);
+                timer = rng.Next(3, 10);
     
             }
         }
 
         private void SpawnPowerups(ContentManager Content) {
-            int num = rng.Next(1, 1);
+            int num = rng.Next(1, 3);
 
             switch (num) {
 
                 case 1:
                     Powerup peer = new Powerup(GeneratePosition(), Content.Load<Texture2D>("Sprites/Peer"));
+                    peer.Type = Fruit.Peer;
                     powerupsList.Add (peer);
                     break;
 
-                
- 
+                case 2:
+                    Powerup banaan = new Powerup(GeneratePosition(), Content.Load<Texture2D>("Sprites/Banaan"));
+                    banaan.Type = Fruit.Banaan;
+                    powerupsList.Add(banaan);
+                    break;
             }
 
         }
@@ -198,6 +202,8 @@ namespace Pong {
             Rectangle ballBox = ball.GetHitBox();
             Rectangle playerOneBox = playerOne.GetHitBox();
             Rectangle playerTwoBox = playerTwo.GetHitBox();
+            int removeIndex = 0;
+
             
             if (CheckCollision(ballBox, playerOneBox) && lastHit != 1) {
                 ball.BounceOffPlayer(1);
@@ -209,15 +215,29 @@ namespace Pong {
                 lastHit = 2;
             }
 
+            //check collisions with powerups
+            foreach (Powerup p in powerupsList) {
+                if (CheckCollision(ballBox, p.GetBox()) ) {
+                    p.DoThing(this);
+                    //p.Despawn();
+                    removeIndex = powerupsList.IndexOf(p);
+                }
+            }
+            if (removeIndex != 0) {
+                powerupsList.RemoveAt(removeIndex);
+                removeIndex = 0;
+            }
+
+
             // Check if ball is hitting score object on left side
-            if (ballPos.X < scoreOne.GetSSX())
+            if (ballBox.X < scoreOne.GetSSX())
             {
                 Console.WriteLine("Right player scores!");
                 Score(2);
             }
 
             // Check if ball is hitting score object on right side
-            if ((ballPos.X + Constants.DEFAULTBALLWIDTH) > (screenWidth - scoreOne.GetSSX()))
+            if ((ballBox.X + Constants.DEFAULTBALLWIDTH) > (screenWidth - scoreOne.GetSSX()))
             {
                 Console.WriteLine("Left player scores!");
                 Score(1);

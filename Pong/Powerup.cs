@@ -5,13 +5,23 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Pong
+
 {
+    public enum Fruit {
+        Peer,
+        Banaan,
+        Appel,
+        Druif
+    }
+
     public class Powerup
     {
+
         int width, height;
         Vector2 position;
         Rectangle hitBox;
         Texture2D sprite;
+        public Fruit Type { get; set; }
 
         public Rectangle GetBox() {
             return hitBox;
@@ -28,12 +38,23 @@ namespace Pong
             height = Constants.DEFAULTPOWERHEIGHT;
             hitBox = new Rectangle((int)position.X, (int)position.Y, width, height);
             sprite = texture;
+            this.Type = Fruit.Peer;
         }
 
-        public void InitialisePowerups() {
+        public void DoThing(GameManager manager) {
+            switch (Type) {
+
+                case Fruit.Peer:
+                    manager.ball.SetSize(2, 2);
+                    break;
+            }
 
         }
 
+        //public void Despawn() {
+
+
+        //}
 
     }
 }
