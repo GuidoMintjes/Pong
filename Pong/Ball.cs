@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Pong {
     public class Ball {
@@ -11,12 +12,20 @@ namespace Pong {
         private float speedup = 2F;
         private Rectangle hitBox;
         private int lastWallHit;
+        private int lastHit;
+        private Texture2D sprite;
 
         public Vector2 GetPos() {
             return position;
         }
         public Rectangle GetHitBox() {
             return hitBox;
+        }
+        public int GetLastHit() {
+            return lastHit;
+        }
+        public Texture2D GetSprite() {
+            return sprite;
         }
 
         public void SetSize (int width, int height) {
@@ -36,12 +45,16 @@ namespace Pong {
         {
             direction = newDir;
         }
+        public void SetLastHit(int hit) {
+            lastHit = hit;
+        }
 
-        public Ball(Vector2 startPos, float defaultSpeed) {
+        public Ball(Vector2 startPos, float defaultSpeed, Texture2D sprite) {
 
             position = startPos;
             speed = defaultSpeed;
             hitBox = new Rectangle((int)position.X, (int)position.Y, Constants.DEFAULTBALLWIDTH, Constants.DEFAULTBALLHEIGHT);
+            sprite = sprite;
         }
 
 
@@ -98,6 +111,7 @@ namespace Pong {
             lastWallHit = 0;
             hitBox.Width = Constants.DEFAULTBALLWIDTH;
             hitBox.Height = Constants.DEFAULTBALLHEIGHT;
+            lastHit = 0;
          }
     }
 }

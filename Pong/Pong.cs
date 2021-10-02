@@ -11,7 +11,7 @@ namespace Pong {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        Texture2D ball; 
+        public Texture2D ball; 
         Texture2D bluePlayer, redPlayer;
         Texture2D pongArt; //splashscreen
 
@@ -48,7 +48,7 @@ namespace Pong {
             manager = new GameManager(3, 5);
 
             // initialise game
-            manager.InitialiseGame(screenWidth, screenHeight, true, Constants.DEFAULTSCREENSPACEPERC);
+            manager.InitialiseGame(screenWidth, screenHeight, true, Constants.DEFAULTSCREENSPACEPERC, Content);
 
             base.Initialize();
         }
@@ -69,7 +69,6 @@ namespace Pong {
             font = Content.Load<SpriteFont>("fonts/file");
             fontBig = Content.Load<SpriteFont>("fonts/file2");
         }
-
 
 
         protected override void Update(GameTime gameTime) {
@@ -135,7 +134,7 @@ namespace Pong {
                 
                 if (state.IsKeyDown(Keys.Space))
                 {
-                    manager.RestartGame();
+                    RestartGame();
                 }
             }
 
@@ -143,6 +142,10 @@ namespace Pong {
         }
 
 
+        private void RestartGame() {
+            manager.InitialiseGame(screenWidth, screenHeight, false, Constants.DEFAULTSCREENSPACEPERC, Content );
+
+        }
 
         protected override void Draw(GameTime gameTime) {
 
@@ -165,6 +168,7 @@ namespace Pong {
                 _spriteBatch.Draw(redPlayer, manager.playerTwo.GetHitBox(), Color.White);
                 _spriteBatch.Draw(ball, manager.ball.GetHitBox(), Color.White);
                 manager.DrawPowerups(_spriteBatch);
+                //manager.DrawBalls(_spriteBatch);
                 _spriteBatch.DrawString(fontBig, Convert.ToString(manager.playerOne.GetLives()) , new Vector2(10,10), Color.Black);
                 _spriteBatch.DrawString(fontBig, Convert.ToString(manager.playerTwo.GetLives()), new Vector2(screenWidth - 25, 10), Color.Black);
                 _spriteBatch.End();

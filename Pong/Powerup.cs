@@ -53,7 +53,8 @@ namespace Pong
                     break;
 
                 case Fruit.Kers:
-                    manager.ExtraBall();
+                    manager.ExtraBall(position);
+                    Console.WriteLine("ball gepspawnd op: " + position);
                     break;
             }
 

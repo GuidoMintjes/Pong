@@ -39,9 +39,6 @@ namespace Pong {
         public ScoreObject scoreTwo;
         private string winner;
 
-        //collision
-        private int lastHit;
-
         //powerups
         List<Powerup> powerupsList = new List<Powerup>();
         bool firstPower = true;
@@ -134,7 +131,7 @@ namespace Pong {
         /// <param name="width">Get the width of the window to use in calculation</param>
         /// <param name="height">Get the width of the window to use in calculation</param>
         /// <param name="defaultBallPos">Tell whether to use default ball position or not</param>
-        public void InitialiseGame(int width, int height, bool defaultBallPos, int percScreenSpace) {
+        public void InitialiseGame(int width, int height, bool defaultBallPos, int percScreenSpace, ContentManager Content) {
             screenWidth = width; screenHeight = height;
 
             playerOne = new Player(1, calcPlayerStartPos(1), startLives,
@@ -148,7 +145,7 @@ namespace Pong {
             }  // Calculate middle of screen to spawn ball,
                                                             // keeping in mind ball dimensions
 
-            ball = new Ball(ballStartPos, ballDefaultSpeed);
+            ball = new Ball(ballStartPos, ballDefaultSpeed, Content.Load<Texture2D>("Sprites/bal"));
             ballList.Add(ball);
 
             scoreOne = new ScoreObject(percScreenSpace, screenWidth);
@@ -166,9 +163,10 @@ namespace Pong {
             }
         }
 
-        public void ExtraBall() {
-            string ballNameTemp = ("ball " + (ballList.Count + 1).ToString());
-            Ball "ball " + (ballList.Count + 1) = new Ball();
+        public void ExtraBall(Vector2 pos) {
+            Ball extraBall = new Ball(pos, ballDefaultSpeed, ball.GetSprite());
+            extraBall.SetDirection(generateDirection());
+            ballList.Add(extraBall);
 
         }
 
@@ -191,7 +189,7 @@ namespace Pong {
         }
 
         private void SpawnPowerups(ContentManager Content) {
-            int num = rng.Next(1, 4);
+            int num = rng.Next(2, 4);
 
             switch (num) {
 
@@ -223,39 +221,45 @@ namespace Pong {
             }
         }
 
+        public void DrawBalls(SpriteBatch spriteBatch) {
+            foreach (Ball b in ballList) {
+                spriteBatch.Draw(b.GetSprite(), b.GetHitBox(), Color.White);
+
+            }
+        }
 
         public void CheckCollisions() {
 
             Rectangle playerOneBox = playerOne.GetHitBox();
             Rectangle playerTwoBox = playerTwo.GetHitBox();
+            int hitIndex = 0;
 
             foreach (Ball b in ballList) {
 
                 Rectangle ballBox = ball.GetHitBox();
-                int removeIndex = 0;
 
-
-                if (CheckCollision(ballBox, playerOneBox) && lastHit != 1) {
+                if (CheckCollision(ballBox, playerOneBox) && b.GetLastHit() != 1) {
                     ball.BounceOffPlayer(1);
-                    lastHit = 1;
+                    b.SetLastHit(1);
                 }
 
-                if (CheckCollision(ballBox, playerTwoBox) && lastHit != 2) {
+                if (CheckCollision(ballBox, playerTwoBox) && b.GetLastHit() != 2) {
                     ball.BounceOffPlayer(1);
-                    lastHit = 2;
+                    b.SetLastHit(2);
                 }
 
                 //check collisions with powerups
                 foreach (Powerup p in powerupsList) {
                     if (CheckCollision(ballBox, p.GetBox())) {
-                        p.DoThing(this);
-                        removeIndex = powerupsList.IndexOf(p);
+                        //p.DoThing(this);
+                        Console.WriteLine("hij is geraakt");
+                        hitIndex = powerupsList.IndexOf(p);
                     }
                 }
-                if (removeIndex != 0) {
-                    powerupsList.RemoveAt(removeIndex);
-                    removeIndex = 0;
-                }
+                //if (hitIndex != 0) {
+                  //  powerupsList.RemoveAt(hitIndex);
+                    //hitIndex = 0;
+                //}
 
 
                 // Check if ball is hitting score object on left side
@@ -269,6 +273,13 @@ namespace Pong {
                     Console.WriteLine("Left player scores!");
                     Score(1);
                 }
+            }
+
+            if (hitIndex != 0) {
+                powerupsList[hitIndex].DoThing(this);
+                Console.WriteLine("doet ding");
+                powerupsList.RemoveAt(hitIndex);
+                hitIndex = 0;
             }
         }
 
@@ -298,7 +309,6 @@ namespace Pong {
             }
 
             ball.Respawn(ballStartPos, ballDefaultSpeed, generateDirection());
-            lastHit = 0;
 
             if (playerOne.GetLives() <= 0)
             {
@@ -312,9 +322,5 @@ namespace Pong {
             }
         }
 
-        public void RestartGame() { 
-            InitialiseGame(screenWidth, screenHeight, false, Constants.DEFAULTSCREENSPACEPERC);
-
-        }
     }
 }
