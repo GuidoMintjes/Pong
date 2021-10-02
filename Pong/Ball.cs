@@ -67,7 +67,6 @@ namespace Pong {
             if(directionCheck == 1) {
 
                 if (new Random().Next(1, 5) == 3) {
-                    Console.WriteLine("Reset bounce!");
                     if(direction.X < -direction.X) {
 
                         direction.X = 1;
@@ -79,8 +78,6 @@ namespace Pong {
 
                     int randomnessX = new Random().Next(70, 200);
                     float randomnessXF = randomnessX / 100f;
-
-                    Console.WriteLine(randomnessXF);
 
                     direction.X *= -1f * randomnessXF;
                 }

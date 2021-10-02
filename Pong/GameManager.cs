@@ -47,7 +47,7 @@ namespace Pong {
         //misc
         static Random rng = new Random();
         float counter;
-        int timer = rng.Next(0,10);
+        int timer = rng.Next(10,50);
 
         //gamestate
         public GameState gameState { get; set; }
@@ -157,11 +157,13 @@ namespace Pong {
 
         public void PowerupsTimer(float time, ContentManager content) {
             counter += time;
+            Console.WriteLine("timer: " + timer);
+            Console.WriteLine("counter: " + counter);
 
             if (counter >= timer) {
                 SpawnPowerups(content);
                 counter = 0;
-                timer = rng.Next(0, 10);
+                timer = rng.Next(10, 50);
     
             }
         }
@@ -175,6 +177,8 @@ namespace Pong {
                     Powerup peer = new Powerup(GeneratePosition(), Content.Load<Texture2D>("Sprites/Peer"));
                     powerupsList.Add (peer);
                     break;
+
+                
  
             }
 
