@@ -64,9 +64,7 @@ namespace Pong {
             bluePlayer = Content.Load<Texture2D>("Sprites/blauweSpeler");
             redPlayer = Content.Load<Texture2D>("Sprites/rodeSpeler");
             pongArt = Content.Load<Texture2D>("Sprites/PONG");
-
-            //powerups
-            peer = Content.Load<Texture2D>("Sprites/Peer");
+        
 
             //fonts
             font = Content.Load<SpriteFont>("fonts/file");
@@ -124,7 +122,7 @@ namespace Pong {
 
                 manager.CheckCollisions();
 
-                manager.PowerupsTimer(deltaTime);
+                manager.PowerupsTimer(deltaTime, Content);
             }
              
             if (manager.gameState == GameState.Pause) {
@@ -167,7 +165,7 @@ namespace Pong {
                 _spriteBatch.Draw(bluePlayer, manager.playerOne.GetHitBox(), Color.White);
                 _spriteBatch.Draw(redPlayer, manager.playerTwo.GetHitBox(), Color.White);
                 _spriteBatch.Draw(ball, manager.ball.GetHitBox(), Color.White);
-                //manager.drawPowerups();
+                manager.DrawPowerups(_spriteBatch);
                 _spriteBatch.DrawString(fontBig, Convert.ToString(manager.playerOne.GetLives()) , new Vector2(10,10), Color.Black);
                 _spriteBatch.DrawString(fontBig, Convert.ToString(manager.playerTwo.GetLives()), new Vector2(screenWidth - 25, 10), Color.Black);
                 _spriteBatch.End();

@@ -1,6 +1,11 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
+//using System.Collections;
+using System.Collections.Generic;
+
 
 namespace Pong {
     //game states
@@ -28,13 +33,18 @@ namespace Pong {
         public Player playerTwo;
         public Ball ball;
         
-        //miscellanious
+        //score
         public ScoreObject scoreOne;
         public ScoreObject scoreTwo;
         private string winner;
 
+        //collision
         private int lastHit;
 
+        //powerups
+        List<Powerup> powerupsList = new List<Powerup>();
+        
+        //misc
         static Random rng = new Random();
         float counter;
         int timer = rng.Next(0,10);
@@ -145,31 +155,37 @@ namespace Pong {
             gameState = GameState.Menu;
         }
 
-        public void PowerupsTimer(float time) {
+        public void PowerupsTimer(float time, ContentManager content) {
             counter += time;
 
             if (counter >= timer) {
-                SpawnPowerups();
+                SpawnPowerups(content);
                 counter = 0;
                 timer = rng.Next(0, 10);
     
             }
         }
 
-        private void SpawnPowerups() {
+        private void SpawnPowerups(ContentManager Content) {
             int num = rng.Next(1, 1);
 
             switch (num) {
 
                 case 1:
-                    Powerup peer = new Powerup(GeneratePosition());
+                    Powerup peer = new Powerup(GeneratePosition(), Content.Load<Texture2D>("Sprites/Peer"));
+                    powerupsList.Add (peer);
                     break;
-
+ 
             }
 
-        //public void draw(GameTime gametime, SpriteBatch spriteBatch);
         }
 
+        public void DrawPowerups(SpriteBatch spriteBatch) {
+            foreach (Powerup p in powerupsList) {
+                spriteBatch.Draw(p.GetSprite(), p.GetBox(), Color.White);
+
+            }
+        }
 
 
         public void CheckCollisions()
