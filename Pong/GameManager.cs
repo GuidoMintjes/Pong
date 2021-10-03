@@ -189,7 +189,7 @@ namespace Pong {
         }
 
         private void SpawnPowerups(ContentManager Content) {
-            int num = rng.Next(3, 4);
+            int num = rng.Next(1, 4);
 
             switch (num) {
 
@@ -305,10 +305,11 @@ namespace Pong {
         }
 
 
-        private void EmptyBallList() {
+        private void EmptyLists() {
 
 
             ballList.Clear();
+            powerupsList.Clear();
 
             //Console.WriteLine(ballList.Count);
 
@@ -343,14 +344,14 @@ namespace Pong {
 
             if (playerOne.GetLives() <= 0) {
 
-                EmptyBallList();
+                EmptyLists();
 
                 gameState = GameState.End;
                 winner = "Player two";
 
             } else if (playerTwo.GetLives() <= 0) {
 
-                EmptyBallList();
+                EmptyLists();
 
                 gameState = GameState.End;
                 winner = "Player one";
