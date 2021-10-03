@@ -282,13 +282,13 @@ namespace Pong {
 
                 if (CheckCollision(ballBox, playerOneBox) && b.GetLastHit() != 1) {
 
-                    b.BounceOffPlayer(1);
+                    b.BounceOffPlayer(1,playerOne);
                     b.SetLastHit(1);
                 }
 
                 if (CheckCollision(ballBox, playerTwoBox) && b.GetLastHit() != 2) {
 
-                    b.BounceOffPlayer(1);
+                    b.BounceOffPlayer(1,playerTwo);
                     b.SetLastHit(2);
                 }
 
@@ -378,9 +378,9 @@ namespace Pong {
             }
 
             //if it's the main ball, respawn it
-            if (ball == b) { 
+            if (b == ballList[0]) { 
 
-                ball.Respawn(ballStartPos, ballDefaultSpeed, GenerateDirection());
+                b.Respawn(ballStartPos, ballDefaultSpeed, GenerateDirection());
 
             } else { //else despawn it
 
