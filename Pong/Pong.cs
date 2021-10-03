@@ -187,7 +187,7 @@ namespace Pong {
             }
 
 
-            // if the game state is 'playing' draw the game
+            // If the game state is 'playing' draw the game
             if (manager.gameState == GameState.Playing) {
 
                 _spriteBatch.Begin();
