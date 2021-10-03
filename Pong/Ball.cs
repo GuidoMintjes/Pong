@@ -88,7 +88,7 @@ namespace Pong {
 
         public void BounceOffPlayer(int directionCheck, Player player = null) {
 
-            float bounceDiff = 1 ;
+            float bounceDiff = 0 ;
 
             if (player != null) {
                 Rectangle playerBox = player.GetHitBox();
@@ -105,7 +105,7 @@ namespace Pong {
             if (directionCheck == 1) {
 
                 direction.X *= -1f;
-                direction.Y *=  bounceDiff;
+                direction.Y *=   1 + bounceDiff;
 
             } else if (directionCheck == 2) {
 
