@@ -1,9 +1,10 @@
 ﻿using System;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
-
+using Microsoft.Xna.Framework.Media;
 
 namespace Pong {
 
@@ -15,6 +16,7 @@ namespace Pong {
         public Texture2D ball; 
         Texture2D bluePlayer, redPlayer;
         Texture2D pongArt; // Splashscreen
+        public Song background;
 
         SpriteFont font, fontBig;
 
@@ -67,6 +69,9 @@ namespace Pong {
             bluePlayer = Content.Load<Texture2D>("Sprites/blauweSpeler");
             redPlayer = Content.Load<Texture2D>("Sprites/rodeSpeler");
             pongArt = Content.Load<Texture2D>("Sprites/PONG");
+            background = Content.Load<Song>("Audio/background");
+
+            MediaPlayer.Play(background);
         
 
             // Fonts
