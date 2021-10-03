@@ -29,22 +29,22 @@ namespace Pong {
         private int screenWidth, screenHeight;
 
 
-        // Create the players and ball
+        // Create the players and ball(list)
         public Player playerOne;
         public Player playerTwo;
         public Ball ball;
         List<Ball> ballList = new List<Ball>();
 
 
-        // Score
+        // Score related
         public ScoreObject scoreOne;
         public ScoreObject scoreTwo;
         private string winner;
 
 
-        // Power-Ups
+        // Power-Ups related
         List<Powerup> powerupsList = new List<Powerup>();
-        bool firstPower = true;
+        bool firstPower;
         
 
         // Miscellaneous
@@ -67,7 +67,6 @@ namespace Pong {
 
 
         public string GetWinner() {
-
             return winner;
         }
 
@@ -116,8 +115,7 @@ namespace Pong {
             return dir;
         }
 
-
-        // Generates a random position on screen
+        
         private Vector2 GeneratePosition() {
 
             return new Vector2(rng.Next(0, screenWidth - 64 ), rng.Next(0, screenHeight - 64));
@@ -177,6 +175,8 @@ namespace Pong {
             gameState = new GameState();
             gameState = GameState.Menu;
 
+            firstPower = true;
+
         }
 
 
@@ -200,6 +200,7 @@ namespace Pong {
 
             counter += time;
 
+            //the first powerup created at the start of the game needs to be a 'blank'
             if (firstPower) {
 
                 Powerup blank = new Powerup(new Vector2(-100, -100), content.Load<Texture2D>("Sprites/pixel"));
@@ -217,7 +218,7 @@ namespace Pong {
         }
 
 
-        // Decide which power up to spawn based on collision and what type it is
+        // Decide which power up to spawn based on a randomizer and what type it is
         private void SpawnPowerups(ContentManager Content) {
 
             int num = rng.Next(1, 4);
@@ -265,6 +266,7 @@ namespace Pong {
             }
         }
 
+
         // Our main method linked to the main game loop that checks all collisions
         public void CheckCollisions() {
 
@@ -294,9 +296,12 @@ namespace Pong {
                 foreach (Powerup p in powerupsList) {
                     if (CheckCollision(ballBox, p.GetBox()) ) {
 
+                        //set the index for the 'hit', to edit at later outside of the loop
                         hitIndex = powerupsList.IndexOf(p);
                     }
                 }
+
+                //remove the item at the hitIndex and activate the powerup
                 if (hitIndex != 0 && powerupsList[hitIndex].Type != Fruit.Kers) {
 
                     powerupsList[hitIndex].DoThing(this, b);
@@ -320,6 +325,7 @@ namespace Pong {
                 }
             }
 
+            //outside of the ball for-loop, activate the Kers powerup to add a new ball
             if (hitIndex != 0) {
 
                 powerupsList[hitIndex].DoThing(this, ball);
@@ -346,7 +352,6 @@ namespace Pong {
 
         private void EmptyLists() {
 
-
             ballList.Clear();
             powerupsList.Clear();
         }
@@ -372,11 +377,12 @@ namespace Pong {
                     break;
             }
 
-            if (ball == b) {
+            //if it's the main ball, respawn it
+            if (ball == b) { 
 
                 ball.Respawn(ballStartPos, ballDefaultSpeed, GenerateDirection());
 
-            } else {
+            } else { //else despawn it
 
                 b.Despawn(ballList);
             }
