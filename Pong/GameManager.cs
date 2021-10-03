@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
+
 namespace Pong {
 
     // Gamestate that says something about the current state our game is in
@@ -395,6 +396,5 @@ namespace Pong {
                 winner = "Player one";
             }
         }
-
     }
 }

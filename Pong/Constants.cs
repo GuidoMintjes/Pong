@@ -1,4 +1,5 @@
 ﻿namespace Pong {
+
     public static class Constants {
 
         // Constants related to ball

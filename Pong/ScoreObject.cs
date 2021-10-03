@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Pong {
+﻿namespace Pong {
     public class ScoreObject {
 
         private float screenSpaceX;
         
+
         /// <summary>
         /// Gets the percentage of width of the screen that will count as a score (left and right)
         /// </summary>

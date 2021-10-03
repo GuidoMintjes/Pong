@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 
+
 namespace Pong {
 
     public class Pong : Game {
@@ -13,7 +14,7 @@ namespace Pong {
 
         public Texture2D ball; 
         Texture2D bluePlayer, redPlayer;
-        Texture2D pongArt; //splashscreen
+        Texture2D pongArt; // Splashscreen
 
         SpriteFont font, fontBig;
 
@@ -209,7 +210,8 @@ namespace Pong {
 
                 _spriteBatch.Begin();
                 
-                _spriteBatch.DrawString(fontBig, "END OF THE GAME \nWinner: " + manager.GetWinner() + "\n\nPress space to restart \nPress escape to exit",
+                _spriteBatch.DrawString(fontBig, "END OF THE GAME \nWinner: " + manager.GetWinner() + 
+                    "\n\nPress space to restart \nPress escape to exit",
                     new Vector2(screenWidth / 2 - 120, screenHeight / 2 - 150), Color.Black) ;
                 
                 _spriteBatch.End();
