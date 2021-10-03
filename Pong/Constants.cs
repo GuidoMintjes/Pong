@@ -15,6 +15,7 @@
         // Constants related to scores
         public const int DEFAULTSCREENSPACEPERC = 3;
 
+
         // Constants related to powerups
         public const int DEFAULTPOWERWIDTH = 64;
         public const int DEFAULTPOWERHEIGHT = 64;
