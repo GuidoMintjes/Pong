@@ -310,13 +310,6 @@ namespace Pong {
 
             ballList.Clear();
             powerupsList.Clear();
-
-            //Console.WriteLine(ballList.Count);
-
-            /*for (int i = 0; i <= (ballList.Count - 1); i++) {
-                ballList.RemoveAt(i);
-                Console.WriteLine("Removed ball: " + i.ToString());
-            }*/
         }
 
 
@@ -325,11 +318,15 @@ namespace Pong {
             switch (team)
             {
                 case 1:
-                    playerTwo.ChangeLives(-1);
+
+                    if(b == ballList[0])
+                        playerTwo.ChangeLives(-1);
                     break;
 
                 case 2:
-                    playerOne.ChangeLives(-1);
+
+                    if(b == ballList[0])
+                        playerOne.ChangeLives(-1);
                     break;
 
                 default:
