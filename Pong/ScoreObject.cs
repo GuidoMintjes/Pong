@@ -8,12 +8,16 @@ namespace Pong {
         private float screenSpaceX;
         
         /// <summary>
-        /// Gets the percentage of width of the screen that will count as a score
+        /// Gets the percentage of width of the screen that will count as a score (left and right)
         /// </summary>
         public float GetSSX() {
             return screenSpaceX;
         }
 
+
+        /// <summary>
+        /// Sets the percentage of width of the screen that will count as a score (left and right)
+        /// </summary>
         public void SetSSX(float percScreenSpaceXParam) {
             screenSpaceX = percScreenSpaceXParam;
         }
