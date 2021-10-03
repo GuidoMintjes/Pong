@@ -85,36 +85,7 @@ namespace Pong {
             SetPos(newPos);
         }
 
-
-        public void BounceOffPlayer(int directionCheck, Player player = null) {
-
-            float bounceDiff = 0 ;
-
-            if (player != null) {
-                Rectangle playerBox = player.GetHitBox();
-                float ballCenter = (position.Y  + hitBox.Height / 2);
-                float playerCenter = (playerBox.Y + playerBox.Height / 2);
-
-                bounceDiff = Math.Abs(ballCenter - playerCenter) % 1;
-
-                //Vector2 diff = new Vector2(Math.Abs(position.X - playerPos.X), Math.Abs(position.Y - playerPos.Y));
-                //bounceAngle = Math.At
-
-            }
-
-            if (directionCheck == 1) {
-
-                direction.X *= -1f;
-                direction.Y *=   1 + bounceDiff;
-
-            } else if (directionCheck == 2) {
-
-                direction.Y *= -1f;
-            }
-        }
-
-        //old bounce with randomizer
-        /*
+ 
         public void BounceOffPlayer(int directionCheck) {
 
             if(directionCheck == 1) {
@@ -141,7 +112,7 @@ namespace Pong {
                 direction.Y *= -1f;
             }
         }
-        */
+        
 
         public void Despawn(List<Ball> list ) {
             int ballIndex = list.IndexOf(this);
