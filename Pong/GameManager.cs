@@ -282,13 +282,13 @@ namespace Pong {
 
                 if (CheckCollision(ballBox, playerOneBox) && b.GetLastHit() != 1) {
 
-                    b.BounceOffPlayer(1,playerOne);
+                    b.BounceOffPlayer(1);
                     b.SetLastHit(1);
                 }
 
                 if (CheckCollision(ballBox, playerTwoBox) && b.GetLastHit() != 2) {
 
-                    b.BounceOffPlayer(1,playerTwo);
+                    b.BounceOffPlayer(1);
                     b.SetLastHit(2);
                 }
 
