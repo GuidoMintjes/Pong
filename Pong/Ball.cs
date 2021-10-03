@@ -4,9 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
 namespace Pong {
-
     public class Ball {
-
 
         // Variables related to position, speed, appearance, collider
         private Vector2 position;
@@ -18,8 +16,6 @@ namespace Pong {
         private int lastHit;
         private Texture2D sprite;
 
-
-        // Ball getters
         public Vector2 GetPos() {
             return position;
         }
@@ -33,18 +29,19 @@ namespace Pong {
             return sprite;
         }
 
-        
-        // Ball setters
         public void SetSize (int width, int height) {
             hitBox.Width *= width;
             hitBox.Height *= height;
         }
+
         public void SetPos(Vector2 newPos) {
             position = newPos;
         }
+
         public void SetSpeed(float newSpeed) {
             speed = newSpeed;
         }
+
         public void SetDirection(Vector2 newDir)
         {
             direction = newDir;
@@ -53,8 +50,6 @@ namespace Pong {
             lastHit = hit;
         }
 
-
-        // Our ball construct
         public Ball(Vector2 startPos, float defaultSpeed, Texture2D sprite) {
 
             position = startPos;
@@ -70,13 +65,10 @@ namespace Pong {
             Vector2 newPos = GetPos() + combinedDir;
 
             if (newPos.Y >= (screenSize.Y - (hitBox.Height)) && lastWallHit != 2 )  {
-
                 direction.Y *= -1;
                 lastWallHit = 2;
             }
-
             if (newPos.Y <= 0 && lastWallHit != 1) {
-
                 direction.Y *= -1;
                 lastWallHit = 1;
             }
@@ -89,13 +81,10 @@ namespace Pong {
             SetPos(newPos);
         }
 
-
         public void BounceOffPlayer(int directionCheck) {
-
             if(directionCheck == 1) {
 
                 if (new Random().Next(1, 5) == 3) {
-
                     if(direction.X < -direction.X) {
 
                         direction.X = 1;
@@ -111,19 +100,15 @@ namespace Pong {
                     direction.X *= -1f * randomnessXF;
                 }
             } else if (directionCheck == 2) {
-
                 direction.Y *= -1f;
             }
         }
-
 
         public void Despawn(List<Ball> list ) {
             int ballIndex = list.IndexOf(this);
             list.RemoveAt(ballIndex);
 
         }
-
-
         public void Respawn(Vector2 pos, float newSpeed, Vector2 newDirection) {
             position = pos;
             speed = newSpeed;
