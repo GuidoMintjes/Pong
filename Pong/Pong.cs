@@ -185,8 +185,7 @@ namespace Pong {
                     (screenHeight / 2 - 159)), Color.White);
 
                 _spriteBatch.DrawString(font, "Press space to start \nPress P to pause \nPlayer one: " +
-                    "W + D \nPlayer two: Up + Down", 
-
+                    "W + D \nPlayer two: Up + Down \nCherry: extra ball, Pear: bigger ball, Banana: change direction", 
                     new Vector2((screenWidth / 2 - 80), (screenHeight / 2 + 179 )), Color.Black); 
                 _spriteBatch.End();
             }
